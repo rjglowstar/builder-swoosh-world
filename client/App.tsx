@@ -24,6 +24,7 @@ import SupporterConfirmation from "./pages/SupporterConfirmation";
 import Sensitivity from "./pages/Sensitivity";
 import SyncSetup from "./pages/SyncSetup";
 import WidgetSetup from "./pages/WidgetSetup";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="/sensitivity" element={<Sensitivity />} />
           <Route path="/sync" element={<SyncSetup />} />
           <Route path="/widget-setup" element={<WidgetSetup />} />
+          <Route path="/notifications" element={<Notifications />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
