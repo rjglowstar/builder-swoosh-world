@@ -13,12 +13,8 @@ const NotFound = () => {
       location.pathname,
     );
 
-    // Auto-redirect to dashboard after 3 seconds
-    const timer = setTimeout(() => {
-      navigate("/dashboard");
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    // Redirect immediately to dashboard
+    navigate("/dashboard");
   }, [location.pathname, navigate]);
 
   return (
