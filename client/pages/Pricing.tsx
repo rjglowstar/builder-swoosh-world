@@ -16,6 +16,15 @@ import { useState } from "react";
 
 export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("premium");
+  const [billingPeriod, setBillingPeriod] = useState("yearly"); // "monthly" or "yearly"
+
+  const getPrice = (monthlyPrice: number, yearlyPrice: number) => {
+    return billingPeriod === "monthly" ? monthlyPrice : yearlyPrice;
+  };
+
+  const getPeriod = () => {
+    return billingPeriod === "monthly" ? "/month" : "/year";
+  };
 
   const plans = [
     {
@@ -40,8 +49,8 @@ export default function Pricing() {
     {
       id: "premium",
       name: "Premium",
-      price: "₹299",
-      period: "/year",
+      price: `₹${getPrice(49, 299)}`,
+      period: getPeriod(),
       color: "primary",
       icon: Crown,
       features: [
@@ -59,8 +68,8 @@ export default function Pricing() {
     {
       id: "plus",
       name: "Plus",
-      price: "₹599",
-      period: "/year",
+      price: `₹${getPrice(99, 599)}`,
+      period: getPeriod(),
       color: "info",
       icon: Zap,
       features: [
@@ -137,6 +146,44 @@ export default function Pricing() {
             and premium security controls.
           </p>
         </div>
+
+        {/* Billing Period Toggle */}
+        <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-center">
+              <div className="flex bg-muted/30 rounded-lg p-1">
+                <button
+                  onClick={() => setBillingPeriod("monthly")}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    billingPeriod === "monthly"
+                      ? "bg-white shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setBillingPeriod("yearly")}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all relative ${
+                    billingPeriod === "yearly"
+                      ? "bg-white shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Yearly
+                  <Badge className="absolute -top-2 -right-2 bg-success text-white text-xs px-1.5 py-0.5">
+                    Save 40%
+                  </Badge>
+                </button>
+              </div>
+            </div>
+            {billingPeriod === "yearly" && (
+              <p className="text-center text-sm text-success mt-2">
+                💰 Save up to 40% with yearly billing
+              </p>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Plans Grid */}
         <div className="space-y-4">
