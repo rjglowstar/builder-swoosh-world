@@ -8,6 +8,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ManageFaces from "./pages/ManageFaces";
+import Settings from "./pages/Settings";
+import BlockedFaces from "./pages/BlockedFaces";
+import UnlockHistory from "./pages/UnlockHistory";
+import AddFace from "./pages/AddFace";
+import Schedule from "./pages/Schedule";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +26,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/manage-faces" element={<ManageFaces />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/blocked-faces" element={<BlockedFaces />} />
+          <Route path="/unlock-history" element={<UnlockHistory />} />
+          <Route path="/add-face" element={<AddFace />} />
+          <Route path="/schedule" element={<Schedule />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
