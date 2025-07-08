@@ -129,7 +129,7 @@ export default function Login() {
         {/* Additional Options */}
         <div className="space-y-4 text-center">
           <Link
-            to="/manage-faces"
+            to="/dashboard"
             className="block text-muted-foreground hover:text-foreground transition-colors"
           >
             Continue as Guest
