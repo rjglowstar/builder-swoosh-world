@@ -48,9 +48,15 @@ export default function ManageFaces() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>View Blocked Faces</DropdownMenuItem>
-              <DropdownMenuItem>Unlock History</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <Link to="/blocked-faces">
+                <DropdownMenuItem>View Blocked Faces</DropdownMenuItem>
+              </Link>
+              <Link to="/unlock-history">
+                <DropdownMenuItem>Unlock History</DropdownMenuItem>
+              </Link>
+              <Link to="/settings">
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -77,10 +83,12 @@ export default function ManageFaces() {
 
             <div className="p-4 space-y-3">
               <div className="flex space-x-3">
-                <Button className="flex-1 rounded-xl h-12">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  ADD FACE
-                </Button>
+                <Link to="/add-face" className="flex-1">
+                  <Button className="w-full rounded-xl h-12">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    ADD FACE
+                  </Button>
+                </Link>
                 <Button variant="outline" className="flex-1 rounded-xl h-12">
                   <Camera className="w-4 h-4 mr-2" />
                   RESCAN
@@ -166,17 +174,16 @@ export default function ManageFaces() {
         </div>
 
         {/* Add Face Button */}
-        <Card className="bg-white/40 backdrop-blur-sm border-white/20 border-dashed border-2">
-          <CardContent className="p-6">
-            <Button
-              variant="ghost"
-              className="w-full h-16 text-muted-foreground hover:text-foreground hover:bg-white/40 rounded-xl border-none"
-            >
-              <UserPlus className="w-6 h-6 mr-3" />
-              <span className="text-lg">Add New Face</span>
-            </Button>
-          </CardContent>
-        </Card>
+        <Link to="/add-face">
+          <Card className="bg-white/40 backdrop-blur-sm border-white/20 border-dashed border-2 hover:bg-white/60 transition-colors">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center w-full h-16 text-muted-foreground hover:text-foreground rounded-xl">
+                <UserPlus className="w-6 h-6 mr-3" />
+                <span className="text-lg">Add New Face</span>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
