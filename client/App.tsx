@@ -10,6 +10,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import ManageFaces from "./pages/ManageFaces";
+import Profile from "./pages/Profile";
+import Subscription from "./pages/Subscription";
 import Settings from "./pages/Settings";
 import BlockedFaces from "./pages/BlockedFaces";
 import UnlockHistory from "./pages/UnlockHistory";
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/manage-faces" element={<ManageFaces />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/subscription" element={<Subscription />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/blocked-faces" element={<BlockedFaces />} />
           <Route path="/unlock-history" element={<UnlockHistory />} />
