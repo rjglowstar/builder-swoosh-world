@@ -111,7 +111,7 @@ export default function Pricing() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center space-x-3">
+        <div className="max-w-md mx-auto px-4 py-4 flex items-center space-x-3">
           <Link to="/settings">
             <Button variant="ghost" size="icon" className="rounded-full">
               <ArrowLeft className="w-5 h-5" />
@@ -126,20 +126,20 @@ export default function Pricing() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold text-foreground">
+        <div className="text-center space-y-3">
+          <h2 className="text-2xl font-bold text-foreground">
             Choose Your Protection Level
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground">
             Upgrade to unlock advanced face recognition features, cloud sync,
-            and premium security controls for your device.
+            and premium security controls.
           </p>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="space-y-4">
           {plans.map((plan) => (
             <Card
               key={plan.id}
@@ -257,7 +257,7 @@ export default function Pricing() {
           <h3 className="text-xl font-bold text-foreground text-center">
             Frequently Asked Questions
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-3">
             <Card className="bg-white/40 backdrop-blur-sm border-white/20">
               <CardContent className="p-4">
                 <h4 className="font-semibold text-foreground mb-2">
