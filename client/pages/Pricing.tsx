@@ -26,26 +26,27 @@ export default function Pricing() {
     return billingPeriod === "monthly" ? "/month" : "/year";
   };
 
-  const plans = [
-    {
-      id: "free",
-      name: "Free",
-      price: "₹0",
-      period: "",
-      color: "muted",
-      icon: Shield,
-      features: [
-        { name: "Basic face recognition", included: true },
-        { name: "Up to 3 trusted faces", included: true },
-        { name: "Local data storage", included: true },
-        { name: "Manual protection mode", included: true },
-        { name: "Advanced scheduling", included: false },
-        { name: "Cloud sync", included: false },
-        { name: "Unlimited faces", included: false },
-        { name: "Priority support", included: false },
-      ],
-      popular: false,
-    },
+  const freePlan = {
+    id: "free",
+    name: "Free",
+    price: "₹0",
+    period: "",
+    color: "muted",
+    icon: Shield,
+    features: [
+      { name: "Basic face recognition", included: true },
+      { name: "Up to 3 trusted faces", included: true },
+      { name: "Local data storage", included: true },
+      { name: "Manual protection mode", included: true },
+      { name: "Advanced scheduling", included: false },
+      { name: "Cloud sync", included: false },
+      { name: "Unlimited faces", included: false },
+      { name: "Priority support", included: false },
+    ],
+    popular: false,
+  };
+
+  const paidPlans = [
     {
       id: "premium",
       name: "Premium",
@@ -147,8 +148,59 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Billing Period Toggle */}
-        <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+        {/* Free Plan - Always Available */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-medium text-muted-foreground text-center">
+            Current Plan
+          </h3>
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+            <CardContent className="p-4">
+              <div className="text-center space-y-3">
+                <div className="w-10 h-10 mx-auto rounded-2xl flex items-center justify-center bg-muted/20">
+                  <freePlan.icon className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">
+                    {freePlan.name}
+                  </h3>
+                  <div className="flex items-baseline justify-center space-x-1">
+                    <span className="text-2xl font-bold text-foreground">
+                      {freePlan.price}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2 mt-4">
+                {freePlan.features.slice(0, 4).map((feature, index) => (
+                  <div key={index} className="flex items-start space-x-2">
+                    <Check className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-foreground">
+                      {feature.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <Button
+                disabled
+                className="w-full h-10 rounded-xl mt-4"
+                variant="outline"
+              >
+                Current Plan
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Premium Plans Section */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-medium text-muted-foreground text-center">
+            Upgrade Options
+          </h3>
+
+          {/* Billing Period Toggle */}
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-center">
               <div className="flex bg-muted/30 rounded-lg p-1">
@@ -185,9 +237,9 @@ export default function Pricing() {
           </CardContent>
         </Card>
 
-        {/* Plans Grid */}
-        <div className="space-y-4">
-          {plans.map((plan) => (
+          {/* Paid Plans */}
+          <div className="space-y-4">
+            {paidPlans.map((plan) => (
             <Card
               key={plan.id}
               className={`relative bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-lg ${
