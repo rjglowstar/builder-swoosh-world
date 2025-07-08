@@ -47,7 +47,7 @@ export default function Index() {
 
         {/* CTA Buttons */}
         <div className="space-y-4">
-          <Link to="/manage-faces" className="w-full">
+          <Link to="/dashboard" className="w-full">
             <Button
               size="lg"
               className="w-full text-lg h-14 rounded-xl font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-200"
