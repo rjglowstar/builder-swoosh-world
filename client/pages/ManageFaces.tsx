@@ -30,7 +30,7 @@ export default function ManageFaces() {
       <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Link to="/">
+            <Link to="/dashboard">
               <Button variant="ghost" size="icon" className="rounded-full">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
