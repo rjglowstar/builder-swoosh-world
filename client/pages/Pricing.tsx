@@ -201,136 +201,139 @@ export default function Pricing() {
 
           {/* Billing Period Toggle */}
           <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-center">
-              <div className="flex bg-muted/30 rounded-lg p-1">
-                <button
-                  onClick={() => setBillingPeriod("monthly")}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    billingPeriod === "monthly"
-                      ? "bg-white shadow-sm text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Monthly
-                </button>
-                <button
-                  onClick={() => setBillingPeriod("yearly")}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all relative ${
-                    billingPeriod === "yearly"
-                      ? "bg-white shadow-sm text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Yearly
-                  <Badge className="absolute -top-2 -right-2 bg-success text-white text-xs px-1.5 py-0.5">
-                    Save 40%
-                  </Badge>
-                </button>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-center">
+                <div className="flex bg-muted/30 rounded-lg p-1">
+                  <button
+                    onClick={() => setBillingPeriod("monthly")}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      billingPeriod === "monthly"
+                        ? "bg-white shadow-sm text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    onClick={() => setBillingPeriod("yearly")}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all relative ${
+                      billingPeriod === "yearly"
+                        ? "bg-white shadow-sm text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Yearly
+                    <Badge className="absolute -top-2 -right-2 bg-success text-white text-xs px-1.5 py-0.5">
+                      Save 40%
+                    </Badge>
+                  </button>
+                </div>
               </div>
-            </div>
-            {billingPeriod === "yearly" && (
-              <p className="text-center text-sm text-success mt-2">
-                💰 Save up to 40% with yearly billing
-              </p>
-            )}
-          </CardContent>
-        </Card>
+              {billingPeriod === "yearly" && (
+                <p className="text-center text-sm text-success mt-2">
+                  💰 Save up to 40% with yearly billing
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Paid Plans */}
           <div className="space-y-4">
             {paidPlans.map((plan) => (
-            <Card
-              key={plan.id}
-              className={`relative bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-lg ${
-                plan.popular ? "ring-2 ring-primary shadow-lg scale-105" : ""
-              } ${plan.special ? "bg-gradient-to-br from-success/10 to-success/5" : ""}`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-white px-3 py-1">
-                    <Star className="w-3 h-3 mr-1" />
-                    Most Popular
-                  </Badge>
-                </div>
-              )}
-
-              {plan.special && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-success text-white px-3 py-1">
-                    <Gift className="w-3 h-3 mr-1" />
-                    Special Offer
-                  </Badge>
-                </div>
-              )}
-
-              <CardContent className="p-6 space-y-6">
-                {/* Plan Header */}
-                <div className="text-center space-y-3">
-                  <div
-                    className={`w-12 h-12 mx-auto rounded-2xl flex items-center justify-center bg-${plan.color}/20`}
-                  >
-                    <plan.icon className={`w-6 h-6 text-${plan.color}`} />
+              <Card
+                key={plan.id}
+                className={`relative bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-lg ${
+                  plan.popular ? "ring-2 ring-primary shadow-lg scale-105" : ""
+                } ${plan.special ? "bg-gradient-to-br from-success/10 to-success/5" : ""}`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-primary text-white px-3 py-1">
+                      <Star className="w-3 h-3 mr-1" />
+                      Most Popular
+                    </Badge>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground">
-                      {plan.name}
-                    </h3>
-                    <div className="flex items-baseline justify-center space-x-1">
-                      <span className="text-3xl font-bold text-foreground">
-                        {plan.price}
-                      </span>
-                      <span className="text-muted-foreground">
-                        {plan.period}
-                      </span>
+                )}
+
+                {plan.special && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-success text-white px-3 py-1">
+                      <Gift className="w-3 h-3 mr-1" />
+                      Special Offer
+                    </Badge>
+                  </div>
+                )}
+
+                <CardContent className="p-6 space-y-6">
+                  {/* Plan Header */}
+                  <div className="text-center space-y-3">
+                    <div
+                      className={`w-12 h-12 mx-auto rounded-2xl flex items-center justify-center bg-${plan.color}/20`}
+                    >
+                      <plan.icon className={`w-6 h-6 text-${plan.color}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-foreground">
+                        {plan.name}
+                      </h3>
+                      <div className="flex items-baseline justify-center space-x-1">
+                        <span className="text-3xl font-bold text-foreground">
+                          {plan.price}
+                        </span>
+                        <span className="text-muted-foreground">
+                          {plan.period}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Features List */}
-                <div className="space-y-3">
-                  {plan.features.map((feature, index) => (
-                    <div key={index} className="flex items-start space-x-2">
-                      {feature.included ? (
-                        <Check className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
-                      ) : (
-                        <X className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                      )}
-                      <span
-                        className={`text-sm ${
-                          feature.included
-                            ? "text-foreground"
-                            : "text-muted-foreground line-through"
-                        }`}
-                      >
-                        {feature.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                  {/* Features List */}
+                  <div className="space-y-3">
+                    {plan.features.map((feature, index) => (
+                      <div key={index} className="flex items-start space-x-2">
+                        {feature.included ? (
+                          <Check className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
+                        ) : (
+                          <X className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                        )}
+                        <span
+                          className={`text-sm ${
+                            feature.included
+                              ? "text-foreground"
+                              : "text-muted-foreground line-through"
+                          }`}
+                        >
+                          {feature.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
 
-                {/* CTA Button */}
-                <Button
-                  onClick={() => handleChoosePlan(plan.id)}
-                  className={`w-full h-12 rounded-xl font-semibold ${
-                    plan.id === selectedPlan
-                      ? ""
-                      : plan.popular
+                  {/* CTA Button */}
+                  <Button
+                    onClick={() => handleChoosePlan(plan.id)}
+                    className={`w-full h-12 rounded-xl font-semibold ${
+                      plan.id === selectedPlan
                         ? ""
-                        : "variant-outline"
-                  }`}
-                  variant={plan.popular || plan.special ? "default" : "outline"}
-                  disabled={plan.id === "free"}
-                >
-                  {plan.id === "free"
-                    ? "Current Plan"
-                    : plan.id === "supporter"
-                      ? "Support Development"
-                      : "Choose Plan"}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                        : plan.popular
+                          ? ""
+                          : "variant-outline"
+                    }`}
+                    variant={
+                      plan.popular || plan.special ? "default" : "outline"
+                    }
+                    disabled={plan.id === "free"}
+                  >
+                    {plan.id === "free"
+                      ? "Current Plan"
+                      : plan.id === "supporter"
+                        ? "Support Development"
+                        : "Choose Plan"}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
 
         {/* Security Features */}
