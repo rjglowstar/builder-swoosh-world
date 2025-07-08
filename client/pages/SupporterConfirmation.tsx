@@ -206,7 +206,7 @@ export default function SupporterConfirmation() {
 
         {/* Action Buttons */}
         <div className="space-y-3">
-          <Link to="/manage-faces">
+          <Link to="/dashboard">
             <Button className="w-full h-14 rounded-xl text-lg font-semibold">
               Start Using Premium Features
             </Button>
