@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
 
 export default function Settings() {
+  const { goBack } = useSmartNavigation();
   const settingsCategories = [
     {
       title: "Account",
