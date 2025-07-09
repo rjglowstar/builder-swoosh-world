@@ -30,6 +30,7 @@ import DeviceManagement from "./pages/DeviceManagement";
 import About from "./pages/About";
 import Help from "./pages/Help";
 import Feedback from "./pages/Feedback";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
