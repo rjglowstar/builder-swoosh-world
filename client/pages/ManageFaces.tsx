@@ -338,88 +338,22 @@ export default function ManageFaces() {
                         className="flex-shrink-0 ml-2"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <DropdownMenu
-                          onOpenChange={(open) =>
-                            setOpenDropdown(open ? face.id : null)
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-full h-8 w-8 transition-all duration-200 hover:bg-primary/10"
+                          onClick={() =>
+                            setExpandedCard(
+                              expandedCard === face.id ? null : face.id,
+                            )
                           }
                         >
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="rounded-full h-8 w-8 transition-all duration-200 hover:bg-primary/10"
-                            >
-                              {openDropdown === face.id ? (
-                                <ChevronUp className="w-4 h-4 text-primary" />
-                              ) : (
-                                <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                              )}
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem
-                              onClick={() => handleStartEdit(face)}
-                            >
-                              <Edit className="w-4 h-4 mr-2" />
-                              Rename
-                            </DropdownMenuItem>
-
-                            {/* Fixed: Clarified Unblock action */}
-                            {face.trusted ? (
-                              <DropdownMenuItem
-                                onClick={() => handleBlock(face.id, face.name)}
-                              >
-                                <X className="w-4 h-4 mr-2" />
-                                Block
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleMoveToTrusted(face.id, face.name)
-                                }
-                              >
-                                <UserCheck className="w-4 h-4 mr-2" />
-                                Move to Trusted
-                              </DropdownMenuItem>
-                            )}
-
-                            {/* Fixed: Added confirmation dialog for delete */}
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <DropdownMenuItem
-                                  className="text-danger"
-                                  onSelect={(e) => e.preventDefault()}
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle className="flex items-center gap-2">
-                                    <AlertCircle className="w-5 h-5 text-danger" />
-                                    Delete {face.name}?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete this face?
-                                    This action cannot be undone and
-                                    {face.name} will need to be re-added to gain
-                                    access again.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDelete(face.name)}
-                                    className="bg-danger hover:bg-danger/90"
-                                  >
-                                    Delete Face
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                          {expandedCard === face.id ? (
+                            <ChevronUp className="w-4 h-4 text-primary" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
