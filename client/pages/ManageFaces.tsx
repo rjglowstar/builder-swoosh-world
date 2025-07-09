@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ManageFaces() {
+  const { goBack } = useSmartNavigation();
   const faces = [
     { id: 1, name: "Alice", trusted: true, avatar: "👩‍💼" },
     { id: 2, name: "Bob", trusted: false, avatar: "👨‍💻" },
