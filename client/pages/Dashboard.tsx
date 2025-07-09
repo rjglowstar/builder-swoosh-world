@@ -1,19 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Shield,
-  User,
-  Eye,
-  Clock,
-  Settings,
-  FileText,
-  Users,
-  CheckCircle,
-  XCircle,
-  HelpCircle,
-  Cloud,
-} from "lucide-react";
+import { Shield, Settings, FileText, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -21,52 +8,28 @@ export default function Dashboard() {
     protection: {
       status: "active",
       currentFace: "Alice",
-      facesAllowed: 3,
-      facesLimit: "Unlimited", // or number for premium users
       guestMode: {
         enabled: false,
-        timeLimit: 30, // minutes
+        timeLimit: 30,
         autoDisable: true,
       },
     },
     todayStats: {
       allowed: 8,
       blocked: 2,
-      unknown: 1,
     },
-    lastSync: "10:45 AM",
-    planType: "free", // free, premium, plus
+    lastSync: "10:42 AM",
     totalTaggedFaces: 5,
-  };
-
-  const getStatusColor = (status: string) => {
-    return status === "active" ? "text-success" : "text-muted-foreground";
-  };
-
-  const getStatusBadge = (status: string) => {
-    return status === "active" ? (
-      <Badge className="bg-success/10 text-success border-success/20">
-        <CheckCircle className="w-3 h-3 mr-1" />
-        Active
-      </Badge>
-    ) : (
-      <Badge variant="secondary">
-        <XCircle className="w-3 h-3 mr-1" />
-        Inactive
-      </Badge>
-    );
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Shield className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-primary">Dashboard</h1>
           </div>
-
           <Link to="/settings">
             <Button variant="ghost" size="icon" className="rounded-full">
               <Settings className="w-5 h-5" />
@@ -76,54 +39,46 @@ export default function Dashboard() {
       </div>
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
-        {/* Dashboard Card - matching wireframe exactly */}
         <Card className="bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-4 space-y-3">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-foreground">Protection:</span>
-                <div className="flex items-center space-x-2">
-                  {getStatusBadge(dashboardData.protection.status)}
+            <div className="flex items-center justify-between">
+              <span className="text-foreground">Protection:</span>
+              <span className="font-medium text-success">Active</span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-foreground">Current Face:</span>
+              <span className="font-medium text-foreground">
+                {dashboardData.protection.currentFace}
+              </span>
+            </div>
+
+            <div className="flex items-start justify-between">
+              <span className="text-foreground">Unlocks Today:</span>
+              <div className="text-right">
+                <div className="text-foreground">
+                  Allowed {dashboardData.todayStats.allowed}, Blocked{" "}
+                  {dashboardData.todayStats.blocked}
                 </div>
               </div>
+            </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-foreground">Current Face:</span>
-                <span className="font-medium text-foreground">
-                  {dashboardData.protection.currentFace}
-                </span>
-              </div>
+            <div className="flex items-center justify-between">
+              <span className="text-foreground">Total Tagged Faces:</span>
+              <span className="font-medium text-foreground">
+                {dashboardData.totalTaggedFaces}
+              </span>
+            </div>
 
-              <div className="flex items-start justify-between">
-                <span className="text-foreground">Unlocks Today:</span>
-                <div className="text-right">
-                  <div className="text-foreground">
-                    Allowed {dashboardData.todayStats.allowed}
-                  </div>
-                  <div className="text-foreground">
-                    Blocked {dashboardData.todayStats.blocked}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-foreground">Total Tagged Faces:</span>
-                <span className="font-medium text-foreground">
-                  {dashboardData.totalTaggedFaces}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-foreground">Last Sync:</span>
-                <span className="font-medium text-foreground">
-                  {dashboardData.lastSync}
-                </span>
-              </div>
+            <div className="flex items-center justify-between">
+              <span className="text-foreground">Last Sync:</span>
+              <span className="font-medium text-foreground">
+                {dashboardData.lastSync}
+              </span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
           <Link to="/unlock-history">
             <Button
@@ -141,84 +96,6 @@ export default function Dashboard() {
             </Button>
           </Link>
         </div>
-
-        {/* Additional Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
-          <Link to="/blocked-faces">
-            <Card className="bg-danger/10 border-danger/20 hover:bg-danger/20 transition-colors cursor-pointer">
-              <CardContent className="p-3 text-center">
-                <XCircle className="w-5 h-5 text-danger mx-auto mb-1" />
-                <div className="text-sm font-medium text-danger">
-                  Blocked Faces
-                </div>
-                <div className="text-xs text-danger/80">
-                  {dashboardData.todayStats.blocked} today
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/add-face">
-            <Card className="bg-primary/10 border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer">
-              <CardContent className="p-3 text-center">
-                <User className="w-5 h-5 text-primary mx-auto mb-1" />
-                <div className="text-sm font-medium text-primary">Add Face</div>
-                <div className="text-xs text-primary/80">New trusted face</div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-
-        {/* Security Insights */}
-        <Card className="bg-info/10 border-info/20">
-          <CardContent className="p-4 space-y-3">
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5 text-info" />
-              <h3 className="font-semibold text-info">Security Insights</h3>
-            </div>
-
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-success rounded-full"></div>
-                <span className="text-info/80">
-                  {Math.round(
-                    (dashboardData.todayStats.allowed /
-                      (dashboardData.todayStats.allowed +
-                        dashboardData.todayStats.blocked)) *
-                      100,
-                  )}
-                  % success rate today
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-info/80">
-                  {dashboardData.protection.facesAllowed} trusted faces
-                  configured
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Plan Status */}
-        {dashboardData.planType === "free" && (
-          <Card className="bg-gradient-to-r from-primary/10 to-blue-100/50 border-primary/20">
-            <CardContent className="p-4 text-center space-y-3">
-              <div className="flex items-center justify-center space-x-2">
-                <Shield className="w-5 h-5 text-primary" />
-                <span className="font-semibold text-primary">Free Plan</span>
-              </div>
-              <p className="text-sm text-primary/80">
-                Upgrade to unlock cloud sync, unlimited faces, and advanced
-                security features
-              </p>
-              <Link to="/pricing">
-                <Button className="w-full h-10 rounded-xl">Upgrade Now</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );
