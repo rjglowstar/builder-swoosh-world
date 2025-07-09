@@ -333,11 +333,19 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
-              {quickActions.map((action) => (
+              {allQuickActions.map((action) => (
                 <Link key={action.to} to={action.to}>
-                  <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
+                  <Card
+                    className={`hover:bg-primary/5 transition-colors cursor-pointer ${
+                      action.priority ? "bg-warning/10 border-warning/20" : ""
+                    }`}
+                  >
                     <CardContent className="p-3">
-                      <action.icon className="w-5 h-5 text-primary mb-2" />
+                      <action.icon
+                        className={`w-5 h-5 mb-2 ${
+                          action.priority ? "text-warning" : "text-primary"
+                        }`}
+                      />
                       <div className="text-sm font-medium text-foreground">
                         {action.label}
                       </div>
