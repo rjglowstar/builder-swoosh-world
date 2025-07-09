@@ -32,11 +32,14 @@ export default function ManageFaces() {
       <div className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Link to="/dashboard">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={goBack}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
             <div className="flex items-center space-x-2">
               <Shield className="w-6 h-6 text-primary" />
               <h1 className="text-xl font-bold text-primary">Manage Faces</h1>
