@@ -206,7 +206,7 @@ export default function Dashboard() {
       desc: "Home screen controls",
     },
     {
-      to: "/sync-setup",
+      to: "/sync",
       icon: Cloud,
       label: "Cloud Sync",
       desc: "Cross-device sync",
