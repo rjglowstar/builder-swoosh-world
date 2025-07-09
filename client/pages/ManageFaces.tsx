@@ -356,6 +356,105 @@ export default function ManageFaces() {
                         </Button>
                       </div>
                     </div>
+
+                    {/* Accordion-style Action Menu */}
+                    {expandedCard === face.id && (
+                      <div className="border-t border-white/20 mt-4 pt-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                        <div className="grid grid-cols-1 gap-2">
+                          {/* Rename Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full justify-start h-10 text-left"
+                            onClick={() => {
+                              handleStartEdit(face);
+                              setExpandedCard(null);
+                            }}
+                          >
+                            <Edit className="w-4 h-4 mr-3" />
+                            Rename
+                          </Button>
+
+                          {/* Block/Unblock Button */}
+                          {face.trusted ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                              onClick={() => {
+                                handleBlock(face.id, face.name);
+                                setExpandedCard(null);
+                              }}
+                            >
+                              <X className="w-4 h-4 mr-3" />
+                              Block
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-start h-10 text-left text-success border-success hover:bg-success hover:text-white"
+                              onClick={() => {
+                                handleMoveToTrusted(face.id, face.name);
+                                setExpandedCard(null);
+                              }}
+                            >
+                              <UserCheck className="w-4 h-4 mr-3" />
+                              Move to Trusted
+                            </Button>
+                          )}
+
+                          {/* Delete Button with Confirmation */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                              >
+                                <Trash2 className="w-4 h-4 mr-3" />
+                                Delete
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="flex items-center gap-2">
+                                  <AlertCircle className="w-5 h-5 text-danger" />
+                                  Delete {face.name}?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete this face?
+                                  This action cannot be undone and {face.name}{" "}
+                                  will need to be re-added to gain access again.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => {
+                                    handleDelete(face.name);
+                                    setExpandedCard(null);
+                                  }}
+                                  className="bg-danger hover:bg-danger/90"
+                                >
+                                  Delete Face
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+
+                        {/* Close button */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full mt-2 text-muted-foreground"
+                          onClick={() => setExpandedCard(null)}
+                        >
+                          Close
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ))}
