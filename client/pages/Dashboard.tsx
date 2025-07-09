@@ -27,18 +27,65 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const { navigateFrom } = useSmartNavigation();
+  const [guestModeStatus, setGuestModeStatus] = useState({
+    enabled: false,
+    timeLimit: "unlimited",
+    remainingMinutes: 0,
+  });
+
+  // Check Guest Mode status from localStorage
+  useEffect(() => {
+    const checkGuestMode = () => {
+      const enabled = localStorage.getItem("guestModeEnabled") === "true";
+      const timeLimit =
+        localStorage.getItem("guestModeTimeLimit") || "unlimited";
+      const startTime = localStorage.getItem("guestModeStartTime");
+
+      if (enabled && startTime && timeLimit !== "unlimited") {
+        const start = new Date(startTime);
+        const now = new Date();
+        const elapsedMinutes = Math.floor(
+          (now.getTime() - start.getTime()) / (1000 * 60),
+        );
+        const remainingMinutes = Math.max(
+          0,
+          parseInt(timeLimit) - elapsedMinutes,
+        );
+
+        // Auto-disable if time expired
+        if (remainingMinutes <= 0) {
+          localStorage.removeItem("guestModeEnabled");
+          localStorage.removeItem("guestModeTimeLimit");
+          localStorage.removeItem("guestModeStartTime");
+          setGuestModeStatus({
+            enabled: false,
+            timeLimit: "unlimited",
+            remainingMinutes: 0,
+          });
+        } else {
+          setGuestModeStatus({ enabled, timeLimit, remainingMinutes });
+        }
+      } else {
+        setGuestModeStatus({ enabled, timeLimit, remainingMinutes: 0 });
+      }
+    };
+
+    checkGuestMode();
+    // Check every 30 seconds for updates
+    const interval = setInterval(checkGuestMode, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const dashboardData = {
     protection: {
       status: "active",
       currentFace: "Alice",
-      guestMode: {
-        enabled: false, // This should come from global state in real app
-        timeLimit: 30,
-        remainingMinutes: 25, // For demo when enabled
-      },
+      guestMode: guestModeStatus,
     },
     todayStats: {
       allowed: 8,
