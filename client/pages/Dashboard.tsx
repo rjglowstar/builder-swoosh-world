@@ -23,6 +23,11 @@ export default function Dashboard() {
       currentFace: "Alice",
       facesAllowed: 3,
       facesLimit: "Unlimited", // or number for premium users
+      guestMode: {
+        enabled: false,
+        timeLimit: 30, // minutes
+        autoDisable: true,
+      },
     },
     todayStats: {
       allowed: 8,
@@ -31,6 +36,7 @@ export default function Dashboard() {
     },
     lastSync: "10:45 AM",
     planType: "free", // free, premium, plus
+    totalTaggedFaces: 5,
   };
 
   const getStatusColor = (status: string) => {
