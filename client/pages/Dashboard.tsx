@@ -75,82 +75,50 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Protection Status */}
+      <div className="max-w-md mx-auto px-4 py-4 space-y-4">
+        {/* Dashboard Card - matching wireframe exactly */}
         <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-foreground">
-                Protection Status
-              </h2>
-              {getStatusBadge(dashboardData.protection.status)}
-            </div>
-
-            <div className="space-y-3">
+          <CardContent className="p-4 space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Current Face:</span>
+                <span className="text-foreground">Protection:</span>
                 <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 bg-success/20 rounded-full flex items-center justify-center">
-                    <User className="w-3 h-3 text-success" />
-                  </div>
-                  <span className="font-medium text-foreground">
-                    {dashboardData.protection.currentFace}
-                  </span>
+                  {getStatusBadge(dashboardData.protection.status)}
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Faces Allowed:</span>
+                <span className="text-foreground">Current Face:</span>
                 <span className="font-medium text-foreground">
-                  {dashboardData.protection.facesAllowed} /{" "}
-                  {dashboardData.protection.facesLimit}
+                  {dashboardData.protection.currentFace}
                 </span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Today's Activity */}
-        <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4 space-y-4">
-            <h2 className="text-lg font-semibold text-foreground">
-              Unlock Attempts (Today)
-            </h2>
+              <div className="flex items-start justify-between">
+                <span className="text-foreground">Unlocks Today:</span>
+                <div className="text-right">
+                  <div className="text-foreground">
+                    Allowed {dashboardData.todayStats.allowed}
+                  </div>
+                  <div className="text-foreground">
+                    Blocked {dashboardData.todayStats.blocked}
+                  </div>
+                </div>
+              </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              <div className="text-center p-3 bg-success/10 rounded-xl">
-                <div className="text-xl font-bold text-success">
-                  {dashboardData.todayStats.allowed}
-                </div>
-                <div className="text-xs text-success/80">Allowed</div>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">Total Tagged Faces:</span>
+                <span className="font-medium text-foreground">
+                  {dashboardData.totalTaggedFaces}
+                </span>
               </div>
-              <div className="text-center p-3 bg-danger/10 rounded-xl">
-                <div className="text-xl font-bold text-danger">
-                  {dashboardData.todayStats.blocked}
-                </div>
-                <div className="text-xs text-danger/80">Blocked</div>
-              </div>
-              <div className="text-center p-3 bg-warning/10 rounded-xl">
-                <div className="text-xl font-bold text-warning">
-                  {dashboardData.todayStats.unknown}
-                </div>
-                <div className="text-xs text-warning/80">Unknown</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Sync Status */}
-        <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Cloud className="w-5 h-5 text-muted-foreground" />
-                <span className="text-muted-foreground">Last Sync:</span>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">Last Sync:</span>
+                <span className="font-medium text-foreground">
+                  {dashboardData.lastSync}
+                </span>
               </div>
-              <span className="font-medium text-foreground">
-                {dashboardData.lastSync}
-              </span>
             </div>
           </CardContent>
         </Card>
