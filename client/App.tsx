@@ -27,6 +27,7 @@ import WidgetSetup from "./pages/WidgetSetup";
 import Notifications from "./pages/Notifications";
 import GuestMode from "./pages/GuestMode";
 import DeviceManagement from "./pages/DeviceManagement";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
