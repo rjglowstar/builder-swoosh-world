@@ -366,13 +366,12 @@ export default function ManageFaces() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="w-full justify-start h-10 text-left"
+                            className="h-9 text-xs"
                             onClick={() => {
                               handleStartEdit(face);
-                              setExpandedCard(null);
                             }}
                           >
-                            <Edit className="w-4 h-4 mr-3" />
+                            <Edit className="w-3 h-3 mr-1" />
                             Rename
                           </Button>
 
@@ -381,27 +380,27 @@ export default function ManageFaces() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                              className="h-9 text-xs text-danger border-danger hover:bg-danger hover:text-white"
                               onClick={() => {
                                 handleBlock(face.id, face.name);
                                 setExpandedCard(null);
                               }}
                             >
-                              <X className="w-4 h-4 mr-3" />
+                              <X className="w-3 h-3 mr-1" />
                               Block
                             </Button>
                           ) : (
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full justify-start h-10 text-left text-success border-success hover:bg-success hover:text-white"
+                              className="h-9 text-xs text-success border-success hover:bg-success hover:text-white"
                               onClick={() => {
                                 handleMoveToTrusted(face.id, face.name);
                                 setExpandedCard(null);
                               }}
                             >
-                              <UserCheck className="w-4 h-4 mr-3" />
-                              Move to Trusted
+                              <UserCheck className="w-3 h-3 mr-1" />
+                              Trusted
                             </Button>
                           )}
 
@@ -411,9 +410,9 @@ export default function ManageFaces() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                                className="h-9 text-xs text-danger border-danger hover:bg-danger hover:text-white"
                               >
-                                <Trash2 className="w-4 h-4 mr-3" />
+                                <Trash2 className="w-3 h-3 mr-1" />
                                 Delete
                               </Button>
                             </AlertDialogTrigger>
