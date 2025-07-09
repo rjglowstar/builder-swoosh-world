@@ -41,7 +41,7 @@ export default function Subscription() {
               <Link to="/settings">
                 <Button
                   variant="outline"
-                  className="w-full h-10 rounded-xl mt-5"
+                  className="w-full h-10 rounded-xl mt-2.5"
                 >
                   Back to Settings
                 </Button>
