@@ -116,6 +116,20 @@ export default function Dashboard() {
     },
   ];
 
+  // Add Guest Mode quick action when active
+  const allQuickActions = dashboardData.protection.guestMode.enabled
+    ? [
+        {
+          to: "/guest-mode",
+          icon: Clock,
+          label: "Guest Mode",
+          desc: `${dashboardData.protection.guestMode.remainingMinutes}m remaining`,
+          priority: true,
+        },
+        ...quickActions,
+      ]
+    : quickActions;
+
   const features = [
     {
       to: "/emergency-pin",
