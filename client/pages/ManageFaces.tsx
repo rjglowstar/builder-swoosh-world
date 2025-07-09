@@ -63,7 +63,7 @@ export default function ManageFaces() {
   const [editingName, setEditingName] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [selectedFace, setSelectedFace] = useState<any | null>(null);
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   const faces = [
     {
