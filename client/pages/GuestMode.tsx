@@ -66,67 +66,104 @@ export default function GuestMode() {
       </div>
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
-        {/* Status & Main Control */}
+        {/* Main Control */}
         <Card className="bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-foreground">Status:</h2>
-              <Badge
-                className={
+            <div className="text-center space-y-3">
+              <div className="flex items-center justify-center space-x-2">
+                <h2 className="text-xl font-semibold text-foreground">
+                  Guest Mode
+                </h2>
+                <Badge
+                  className={
+                    isGuestModeEnabled
+                      ? "bg-success/10 text-success border-success/20"
+                      : "bg-slate-100 text-slate-600 border-slate-200"
+                  }
+                >
+                  {isGuestModeEnabled ? (
+                    <>
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      ACTIVE
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-3 h-3 mr-1" />
+                      INACTIVE
+                    </>
+                  )}
+                </Badge>
+              </div>
+
+              <Button
+                onClick={handleToggleGuestMode}
+                className={`w-full h-14 rounded-xl text-lg font-semibold ${
                   isGuestModeEnabled
-                    ? "bg-success/10 text-success border-success/20"
-                    : "bg-slate-100 text-slate-600 border-slate-200"
-                }
+                    ? "bg-danger hover:bg-danger/90 text-white"
+                    : "bg-primary hover:bg-primary/90"
+                }`}
               >
                 {isGuestModeEnabled ? (
                   <>
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    ON
+                    <XCircle className="w-5 h-5 mr-2" />
+                    Turn OFF Guest Mode
                   </>
                 ) : (
                   <>
-                    <XCircle className="w-3 h-3 mr-1" />
-                    OFF
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    Turn ON Guest Mode
                   </>
                 )}
-              </Badge>
-            </div>
+              </Button>
 
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-foreground">Time Limit:</span>
-              <Select value={timeLimit} onValueChange={setTimeLimit}>
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="15">15 min</SelectItem>
-                  <SelectItem value="30">30 min</SelectItem>
-                  <SelectItem value="60">60 min</SelectItem>
-                  <SelectItem value="120">2 hours</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button
-              onClick={handleStartGuestMode}
-              className="w-full h-12 rounded-xl"
-              disabled={isGuestModeEnabled}
-            >
-              {isGuestModeEnabled ? "Guest Mode Active" : "Start Guest Mode"}
-            </Button>
-
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-sm text-foreground">
-                Auto-disable when screen off
-              </span>
-              <Switch
-                checked={autoDisableScreenOff}
-                onCheckedChange={setAutoDisableScreenOff}
-                size="sm"
-              />
+              {isGuestModeEnabled && (
+                <div className="p-3 bg-success/10 rounded-lg border border-success/20">
+                  <div className="flex items-center justify-center space-x-2 text-success">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-sm font-medium">
+                      Active for {timeLimit} minutes
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
+
+        {/* Optional Settings */}
+        {!isGuestModeEnabled && (
+          <Card className="bg-slate-50/60 backdrop-blur-sm border-slate-200/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Clock className="w-5 h-5 text-slate-600" />
+                Optional Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-foreground font-medium">
+                    Time Limit
+                  </span>
+                  <div className="text-sm text-muted-foreground">
+                    How long Guest Mode stays active
+                  </div>
+                </div>
+                <Select value={timeLimit} onValueChange={setTimeLimit}>
+                  <SelectTrigger className="w-[100px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="15">15 min</SelectItem>
+                    <SelectItem value="30">30 min</SelectItem>
+                    <SelectItem value="60">60 min</SelectItem>
+                    <SelectItem value="120">2 hours</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* How Guest Mode Works */}
         <Card className="bg-info/10 border-info/20">
