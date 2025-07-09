@@ -302,7 +302,10 @@ export default function Dashboard() {
                     Active
                   </Badge>
                   <span className="text-sm text-muted-foreground">
-                    {dashboardData.protection.guestMode.remainingMinutes}m left
+                    {dashboardData.protection.guestMode.timeLimit ===
+                    "unlimited"
+                      ? "No limit"
+                      : `${dashboardData.protection.guestMode.remainingMinutes}m left`}
                   </span>
                 </div>
               </div>
