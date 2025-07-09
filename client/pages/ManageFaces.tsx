@@ -17,6 +17,7 @@ import {
   Eye,
   Clock,
   Smartphone,
+  Calendar,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
