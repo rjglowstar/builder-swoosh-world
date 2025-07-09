@@ -196,10 +196,11 @@ export default function GuestMode() {
                   </div>
                 </div>
                 <Select value={timeLimit} onValueChange={setTimeLimit}>
-                  <SelectTrigger className="w-[100px]">
+                  <SelectTrigger className="w-[130px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="unlimited">No Time Limit</SelectItem>
                     <SelectItem value="15">15 min</SelectItem>
                     <SelectItem value="30">30 min</SelectItem>
                     <SelectItem value="60">60 min</SelectItem>
