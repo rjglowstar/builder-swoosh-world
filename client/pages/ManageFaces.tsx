@@ -267,34 +267,7 @@ export default function ManageFaces() {
                             </Tooltip>
                           )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          {editingName === face.id ? (
-                            <div
-                              className="flex items-center space-x-2"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Input
-                                value={editValue}
-                                onChange={(e) => setEditValue(e.target.value)}
-                                className="h-8 text-sm flex-1"
-                                autoFocus
-                              />
-                              <Button
-                                size="sm"
-                                onClick={() => handleSaveEdit(face.id)}
-                              >
-                                Save
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={handleCancelEdit}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          ) : (
-                            <>
+                                                <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 flex-wrap">
                                 {editingName === face.id ? (
                                   <Input
