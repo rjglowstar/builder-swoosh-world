@@ -62,7 +62,7 @@ export default function ManageFaces() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-8 space-y-8">
         {/* Camera Preview */}
         <Card className="overflow-hidden bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-0">
@@ -81,7 +81,7 @@ export default function ManageFaces() {
               </div>
             </div>
 
-            <div className="p-4 space-y-3">
+            <div className="p-4 pt-6 space-y-3">
               <div className="flex space-x-3">
                 <Link to="/add-face" className="flex-1">
                   <Button className="w-full rounded-xl h-12">
