@@ -81,7 +81,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-md mx-auto px-4 py-8 space-y-6">
         {/* Premium Status Card */}
         <Card className="bg-gradient-to-r from-primary to-blue-600 text-white border-none">
           <CardContent className="p-4">
