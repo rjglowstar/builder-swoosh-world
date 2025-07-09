@@ -230,6 +230,22 @@ export default function Dashboard() {
                 Excellent
               </Badge>
             </div>
+
+            {/* Guest Mode Status */}
+            {dashboardData.protection.guestMode.enabled && (
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">Guest Mode:</span>
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-warning/10 text-warning border-warning/20">
+                    <Clock className="w-3 h-3 mr-1" />
+                    Active
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    {dashboardData.protection.guestMode.remainingMinutes}m left
+                  </span>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
