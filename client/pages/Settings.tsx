@@ -34,6 +34,7 @@ export default function Settings() {
       items: [
         { name: "Face Management", path: "/manage-faces" },
         { name: "Blocked Faces", path: "/blocked-faces" },
+        { name: "Guest Mode", path: "/guest-mode" },
         { name: "Emergency PIN", path: "/emergency-pin" },
         { name: "Detection Sensitivity", path: "/sensitivity" },
         { name: "Protection Schedule", path: "/schedule" },
