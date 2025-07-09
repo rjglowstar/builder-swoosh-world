@@ -444,6 +444,97 @@ export default function ManageFaces() {
                           </AlertDialog>
                         </div>
 
+                        {/* Detailed Information Section */}
+                        <div className="space-y-3 bg-muted/30 rounded-lg p-3">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-xs font-medium text-muted-foreground">
+                                Match Confidence
+                              </label>
+                              <div className="flex items-center gap-2 mt-1">
+                                <div className="flex-1 bg-muted rounded-full h-1.5">
+                                  <div
+                                    className={`h-1.5 rounded-full ${
+                                      face.matchConfidence >= 90
+                                        ? "bg-success"
+                                        : face.matchConfidence >= 75
+                                          ? "bg-warning"
+                                          : "bg-danger"
+                                    }`}
+                                    style={{
+                                      width: `${face.matchConfidence}%`,
+                                    }}
+                                  />
+                                </div>
+                                <span className="text-sm font-bold text-primary">
+                                  {face.matchConfidence}%
+                                </span>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-xs font-medium text-muted-foreground">
+                                Status
+                              </label>
+                              <div className="flex items-center gap-1 mt-1">
+                                {face.trusted ? (
+                                  <>
+                                    <Check className="w-4 h-4 text-success" />
+                                    <span className="text-sm font-medium text-success">
+                                      Trusted
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <X className="w-4 h-4 text-danger" />
+                                    <span className="text-sm font-medium text-danger">
+                                      Blocked
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-2">
+                            <div className="flex items-center gap-2 text-xs">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Last Seen:</span>
+                              <span className="text-muted-foreground">
+                                {face.lastSeen}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Smartphone className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Added By:</span>
+                              <span className="text-muted-foreground">
+                                {face.addedBy}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Calendar className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Date Added:</span>
+                              <span className="text-muted-foreground">
+                                {face.addedDate}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Cloud className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Sync Status:</span>
+                              <span
+                                className={`font-medium ${
+                                  face.isSynced
+                                    ? "text-success"
+                                    : "text-warning"
+                                }`}
+                              >
+                                {face.isSynced
+                                  ? "✓ Synced to Cloud"
+                                  : "⏳ Sync Pending"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Close button */}
                         <Button
                           variant="ghost"
