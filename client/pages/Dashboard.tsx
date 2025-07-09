@@ -69,7 +69,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 py-6 space-y-4">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Protection Status */}
         <Card className="bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-4 space-y-4">
