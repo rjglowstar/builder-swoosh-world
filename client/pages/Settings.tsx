@@ -16,6 +16,7 @@ import {
   Key,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSmartNavigation } from "@/hooks/useSmartNavigation";
 
 export default function Settings() {
   const settingsCategories = [
