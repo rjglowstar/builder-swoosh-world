@@ -296,9 +296,39 @@ export default function ManageFaces() {
                           ) : (
                             <>
                               <div className="flex items-center space-x-2 flex-wrap">
-                                <h3 className="font-semibold text-foreground truncate">
-                                  {face.name}
-                                </h3>
+                                {editingName === face.id ? (
+                                  <Input
+                                    value={editValue}
+                                    onChange={(e) =>
+                                      setEditValue(e.target.value)
+                                    }
+                                    className="h-7 text-base font-semibold bg-transparent border-primary/50 focus:border-primary"
+                                    onBlur={() => {
+                                      if (editValue.trim()) {
+                                        handleSaveEdit(face.id);
+                                      } else {
+                                        handleCancelEdit();
+                                      }
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        if (editValue.trim()) {
+                                          handleSaveEdit(face.id);
+                                        } else {
+                                          handleCancelEdit();
+                                        }
+                                      } else if (e.key === "Escape") {
+                                        handleCancelEdit();
+                                      }
+                                    }}
+                                    autoFocus
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                ) : (
+                                  <h3 className="font-semibold text-foreground truncate">
+                                    {face.name}
+                                  </h3>
+                                )}
                                 <Badge
                                   variant="outline"
                                   className="text-xs whitespace-nowrap"
@@ -359,19 +389,19 @@ export default function ManageFaces() {
 
                     {/* Accordion-style Action Menu */}
                     {expandedCard === face.id && (
-                      <div className="border-t border-white/20 mt-4 pt-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                        <div className="grid grid-cols-1 gap-2">
+                      <div className="border-t border-white/20 mt-4 pt-4 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                        {/* Action Buttons Row */}
+                        <div className="grid grid-cols-3 gap-2">
                           {/* Rename Button */}
                           <Button
                             variant="outline"
                             size="sm"
-                            className="w-full justify-start h-10 text-left"
+                            className="h-9 text-xs"
                             onClick={() => {
                               handleStartEdit(face);
-                              setExpandedCard(null);
                             }}
                           >
-                            <Edit className="w-4 h-4 mr-3" />
+                            <Edit className="w-3 h-3 mr-1" />
                             Rename
                           </Button>
 
@@ -380,27 +410,27 @@ export default function ManageFaces() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                              className="h-9 text-xs text-danger border-danger hover:bg-danger hover:text-white"
                               onClick={() => {
                                 handleBlock(face.id, face.name);
                                 setExpandedCard(null);
                               }}
                             >
-                              <X className="w-4 h-4 mr-3" />
+                              <X className="w-3 h-3 mr-1" />
                               Block
                             </Button>
                           ) : (
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full justify-start h-10 text-left text-success border-success hover:bg-success hover:text-white"
+                              className="h-9 text-xs text-success border-success hover:bg-success hover:text-white"
                               onClick={() => {
                                 handleMoveToTrusted(face.id, face.name);
                                 setExpandedCard(null);
                               }}
                             >
-                              <UserCheck className="w-4 h-4 mr-3" />
-                              Move to Trusted
+                              <UserCheck className="w-3 h-3 mr-1" />
+                              Trusted
                             </Button>
                           )}
 
@@ -410,9 +440,9 @@ export default function ManageFaces() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="w-full justify-start h-10 text-left text-danger border-danger hover:bg-danger hover:text-white"
+                                className="h-9 text-xs text-danger border-danger hover:bg-danger hover:text-white"
                               >
-                                <Trash2 className="w-4 h-4 mr-3" />
+                                <Trash2 className="w-3 h-3 mr-1" />
                                 Delete
                               </Button>
                             </AlertDialogTrigger>
@@ -444,11 +474,102 @@ export default function ManageFaces() {
                           </AlertDialog>
                         </div>
 
+                        {/* Detailed Information */}
+                        <div className="space-y-3 bg-muted/30 rounded-lg p-3">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-xs font-medium text-muted-foreground">
+                                Match Confidence
+                              </label>
+                              <div className="flex items-center gap-2 mt-1">
+                                <div className="flex-1 bg-muted rounded-full h-1.5">
+                                  <div
+                                    className={`h-1.5 rounded-full ${
+                                      face.matchConfidence >= 90
+                                        ? "bg-success"
+                                        : face.matchConfidence >= 75
+                                          ? "bg-warning"
+                                          : "bg-danger"
+                                    }`}
+                                    style={{
+                                      width: `${face.matchConfidence}%`,
+                                    }}
+                                  />
+                                </div>
+                                <span className="text-sm font-bold text-primary">
+                                  {face.matchConfidence}%
+                                </span>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-xs font-medium text-muted-foreground">
+                                Status
+                              </label>
+                              <div className="flex items-center gap-1 mt-1">
+                                {face.trusted ? (
+                                  <>
+                                    <Check className="w-4 h-4 text-success" />
+                                    <span className="text-sm font-medium text-success">
+                                      Trusted
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <X className="w-4 h-4 text-danger" />
+                                    <span className="text-sm font-medium text-danger">
+                                      Blocked
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-2">
+                            <div className="flex items-center gap-2 text-xs">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Last Seen:</span>
+                              <span className="text-muted-foreground">
+                                {face.lastSeen}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Smartphone className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Added By:</span>
+                              <span className="text-muted-foreground">
+                                {face.addedBy}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Calendar className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Date Added:</span>
+                              <span className="text-muted-foreground">
+                                {face.addedDate}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Cloud className="w-3 h-3 text-muted-foreground" />
+                              <span className="font-medium">Sync Status:</span>
+                              <span
+                                className={`font-medium ${
+                                  face.isSynced
+                                    ? "text-success"
+                                    : "text-warning"
+                                }`}
+                              >
+                                {face.isSynced
+                                  ? "✓ Synced to Cloud"
+                                  : "⏳ Sync Pending"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Close button */}
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full mt-2 text-muted-foreground"
+                          className="w-full h-8 text-xs text-muted-foreground"
                           onClick={() => setExpandedCard(null)}
                         >
                           Close
