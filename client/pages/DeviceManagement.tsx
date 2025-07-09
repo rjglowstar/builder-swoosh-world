@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
 
 export default function DeviceManagement() {
+  const { goBack } = useSmartNavigation();
   const [devices, setDevices] = useState([
     {
       id: "A",
