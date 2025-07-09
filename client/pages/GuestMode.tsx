@@ -30,16 +30,14 @@ export default function GuestMode() {
   const { goBack } = useSmartNavigation();
   const [isGuestModeEnabled, setIsGuestModeEnabled] = useState(false);
   const [timeLimit, setTimeLimit] = useState("30");
-  const [autoDisableScreenOff, setAutoDisableScreenOff] = useState(false);
 
-  const handleToggleGuestMode = (enabled: boolean) => {
-    setIsGuestModeEnabled(enabled);
-    console.log("Guest Mode:", enabled ? "Enabled" : "Disabled");
-  };
-
-  const handleStartGuestMode = () => {
-    setIsGuestModeEnabled(true);
-    console.log("Starting Guest Mode for", timeLimit, "minutes");
+  const handleToggleGuestMode = () => {
+    const newState = !isGuestModeEnabled;
+    setIsGuestModeEnabled(newState);
+    console.log(
+      "Guest Mode:",
+      newState ? `Enabled for ${timeLimit} minutes` : "Disabled",
+    );
   };
 
   const mockData = {
