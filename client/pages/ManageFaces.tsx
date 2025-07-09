@@ -10,6 +10,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSmartNavigation } from "@/hooks/useSmartNavigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
