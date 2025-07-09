@@ -26,6 +26,7 @@ import SyncSetup from "./pages/SyncSetup";
 import WidgetSetup from "./pages/WidgetSetup";
 import Notifications from "./pages/Notifications";
 import GuestMode from "./pages/GuestMode";
+import DeviceManagement from "./pages/DeviceManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/widget-setup" element={<WidgetSetup />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/guest-mode" element={<GuestMode />} />
+          <Route path="/device-management" element={<DeviceManagement />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
