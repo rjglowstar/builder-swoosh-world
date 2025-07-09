@@ -296,9 +296,39 @@ export default function ManageFaces() {
                           ) : (
                             <>
                               <div className="flex items-center space-x-2 flex-wrap">
-                                <h3 className="font-semibold text-foreground truncate">
-                                  {face.name}
-                                </h3>
+                                {editingName === face.id ? (
+                                  <Input
+                                    value={editValue}
+                                    onChange={(e) =>
+                                      setEditValue(e.target.value)
+                                    }
+                                    className="h-7 text-base font-semibold bg-transparent border-primary/50 focus:border-primary px-1"
+                                    onBlur={() => {
+                                      if (editValue.trim()) {
+                                        handleSaveEdit(face.id);
+                                      } else {
+                                        handleCancelEdit();
+                                      }
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        if (editValue.trim()) {
+                                          handleSaveEdit(face.id);
+                                        } else {
+                                          handleCancelEdit();
+                                        }
+                                      } else if (e.key === "Escape") {
+                                        handleCancelEdit();
+                                      }
+                                    }}
+                                    autoFocus
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                ) : (
+                                  <h3 className="font-semibold text-foreground truncate">
+                                    {face.name}
+                                  </h3>
+                                )}
                                 <Badge
                                   variant="outline"
                                   className="text-xs whitespace-nowrap"
