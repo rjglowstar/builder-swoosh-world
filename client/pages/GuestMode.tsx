@@ -30,14 +30,43 @@ export default function GuestMode() {
   const { goBack } = useSmartNavigation();
   const [isGuestModeEnabled, setIsGuestModeEnabled] = useState(false);
   const [timeLimit, setTimeLimit] = useState("30");
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [startTime, setStartTime] = useState<Date | null>(null);
 
   const handleToggleGuestMode = () => {
     const newState = !isGuestModeEnabled;
     setIsGuestModeEnabled(newState);
-    console.log(
-      "Guest Mode:",
-      newState ? `Enabled for ${timeLimit} minutes` : "Disabled",
+
+    if (newState) {
+      // Starting Guest Mode
+      const now = new Date();
+      setStartTime(now);
+      setRemainingTime(parseInt(timeLimit));
+      console.log("Guest Mode: Enabled for", timeLimit, "minutes");
+
+      // In a real app, you'd also:
+      // - Store this in global state/context
+      // - Set up a timer to auto-disable
+      // - Sync with other components
+    } else {
+      // Stopping Guest Mode
+      setStartTime(null);
+      setRemainingTime(0);
+      console.log("Guest Mode: Disabled");
+    }
+  };
+
+  // Calculate remaining time (in real app, this would be more sophisticated)
+  const getDisplayTime = () => {
+    if (!isGuestModeEnabled || !startTime) return timeLimit;
+
+    const now = new Date();
+    const elapsedMinutes = Math.floor(
+      (now.getTime() - startTime.getTime()) / (1000 * 60),
     );
+    const remaining = Math.max(0, parseInt(timeLimit) - elapsedMinutes);
+
+    return remaining.toString();
   };
 
   const mockData = {
