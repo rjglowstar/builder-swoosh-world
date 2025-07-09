@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useSmartNavigation } from "@/hooks/useSmartNavigation";
 
 export default function DeviceManagement() {
   const [devices, setDevices] = useState([
