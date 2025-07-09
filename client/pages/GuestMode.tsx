@@ -178,7 +178,7 @@ export default function GuestMode() {
                     Time Limit
                   </span>
                   <div className="text-sm text-muted-foreground">
-                    How long Guest Mode stays active
+                    Guest Mode will run for {timeLimit} minutes when enabled
                   </div>
                 </div>
                 <Select value={timeLimit} onValueChange={setTimeLimit}>
