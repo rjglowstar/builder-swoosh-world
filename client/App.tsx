@@ -62,6 +62,7 @@ const App = () => (
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/guest-mode" element={<GuestMode />} />
           <Route path="/device-management" element={<DeviceManagement />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
