@@ -104,7 +104,7 @@ export default function AddFace() {
               )}
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="p-6 space-y-4">
               <div className="text-center">
                 <h3 className="font-semibold text-foreground mb-2">
                   {hasSnapshot ? "Preview Snapshot" : "Position Your Face"}
