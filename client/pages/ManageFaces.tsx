@@ -247,7 +247,9 @@ export default function ManageFaces() {
                       ? "border-l-4 border-l-success"
                       : "border-l-4 border-l-danger"
                   }`}
-                  onClick={() => setSelectedFace(face)}
+                  onClick={() =>
+                    setExpandedCard(expandedCard === face.id ? null : face.id)
+                  }
                 >
                   <CardContent className="p-4 w-full">
                     <div className="flex items-center w-full">
