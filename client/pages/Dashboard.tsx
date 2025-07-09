@@ -35,9 +35,9 @@ export default function Dashboard() {
       status: "active",
       currentFace: "Alice",
       guestMode: {
-        enabled: false,
+        enabled: false, // This should come from global state in real app
         timeLimit: 30,
-        autoDisable: true,
+        remainingMinutes: 25, // For demo when enabled
       },
     },
     todayStats: {
