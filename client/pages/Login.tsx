@@ -56,7 +56,7 @@ export default function Login() {
             <Link to="/dashboard">
               <Button
                 onClick={handleGoogleSignIn}
-                className="w-full h-14 rounded-xl bg-white text-foreground border-2 border-gray-200 hover:bg-gray-50 shadow-lg"
+                className="w-full mt-2 h-14 rounded-xl bg-white text-foreground border-2 border-gray-200 hover:bg-gray-50 shadow-lg"
                 variant="outline"
               >
                 <div className="w-6 h-6 mr-3">
