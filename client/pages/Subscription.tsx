@@ -39,7 +39,10 @@ export default function Subscription() {
                 </Button>
               </Link>
               <Link to="/settings">
-                <Button variant="outline" className="w-full h-10 rounded-xl">
+                <Button
+                  variant="outline"
+                  className="w-full h-10 rounded-xl mt-5"
+                >
                   Back to Settings
                 </Button>
               </Link>
