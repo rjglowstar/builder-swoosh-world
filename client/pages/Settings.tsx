@@ -50,7 +50,7 @@ export default function Settings() {
       items: [
         { name: "Quick Toggle Widget", path: "/widget-setup" },
         { name: "Notifications", path: "/notifications" },
-        { name: "Auto-Lock Settings", path: "/auto-lock" },
+        { name: "Auto-Lock Settings", path: "/schedule" },
       ],
     },
     {
