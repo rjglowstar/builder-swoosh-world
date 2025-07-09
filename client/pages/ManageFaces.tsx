@@ -359,8 +359,9 @@ export default function ManageFaces() {
 
                     {/* Accordion-style Action Menu */}
                     {expandedCard === face.id && (
-                      <div className="border-t border-white/20 mt-4 pt-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                        <div className="grid grid-cols-1 gap-2">
+                      <div className="border-t border-white/20 mt-4 pt-4 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                        {/* Action Buttons Row - 3 buttons in one row */}
+                        <div className="grid grid-cols-3 gap-2">
                           {/* Rename Button */}
                           <Button
                             variant="outline"
