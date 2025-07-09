@@ -39,13 +39,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   Tooltip,
   TooltipContent,
@@ -61,6 +60,7 @@ export default function ManageFaces() {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingName, setEditingName] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [selectedFace, setSelectedFace] = useState<any | null>(null);
 
   const faces = [
     {
@@ -239,11 +239,12 @@ export default function ManageFaces() {
               {filteredFaces.map((face) => (
                 <Card
                   key={face.id}
-                  className={`bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-md ${
+                  className={`bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-md cursor-pointer ${
                     face.trusted
                       ? "border-l-4 border-l-success"
                       : "border-l-4 border-l-danger"
                   }`}
+                  onClick={() => setSelectedFace(face)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -316,162 +317,167 @@ export default function ManageFaces() {
                                   Last seen: {face.lastSeen}
                                 </span>
                               </div>
+                              <div className="text-xs text-muted-foreground/70 mt-1">
+                                Tap to view details
+                              </div>
                             </>
                           )}
                         </div>
                       </div>
 
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="rounded-full"
-                          >
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => handleStartEdit(face)}
-                          >
-                            <Edit className="w-4 h-4 mr-2" />
-                            Rename
-                          </DropdownMenuItem>
-
-                          {/* Fixed: Clarified Unblock action */}
-                          {face.trusted ? (
-                            <DropdownMenuItem
-                              onClick={() => handleBlock(face.id, face.name)}
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-full"
                             >
-                              <X className="w-4 h-4 mr-2" />
-                              Block
-                            </DropdownMenuItem>
-                          ) : (
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() =>
-                                handleMoveToTrusted(face.id, face.name)
-                              }
+                              onClick={() => handleStartEdit(face)}
                             >
-                              <UserCheck className="w-4 h-4 mr-2" />
-                              Move to Trusted
+                              <Edit className="w-4 h-4 mr-2" />
+                              Rename
                             </DropdownMenuItem>
-                          )}
 
-                          {/* Enhanced: View Details Dialog */}
-                          <Dialog>
-                            <DialogTrigger asChild>
+                            {/* Fixed: Clarified Unblock action */}
+                            {face.trusted ? (
                               <DropdownMenuItem
-                                onSelect={(e) => e.preventDefault()}
+                                onClick={() => handleBlock(face.id, face.name)}
                               >
-                                <Eye className="w-4 h-4 mr-2" />
-                                View Details
+                                <X className="w-4 h-4 mr-2" />
+                                Block
                               </DropdownMenuItem>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle className="flex items-center gap-2">
-                                  <span className="text-2xl">
-                                    {face.avatar}
-                                  </span>
-                                  {face.name} Details
-                                </DialogTitle>
-                                <DialogDescription>
-                                  Complete information about this recognized
-                                  face
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div>
-                                    <label className="text-sm font-medium">
-                                      Match Confidence
-                                    </label>
-                                    <p className="text-lg font-bold text-primary">
-                                      {face.matchConfidence}%
-                                    </p>
-                                  </div>
-                                  <div>
-                                    <label className="text-sm font-medium">
-                                      Status
-                                    </label>
-                                    <p
-                                      className={`font-semibold ${face.trusted ? "text-success" : "text-danger"}`}
-                                    >
-                                      {face.trusted ? "Trusted" : "Blocked"}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2">
-                                    <Clock className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm">
-                                      Last seen: {face.lastSeen}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <Smartphone className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm">
-                                      Added by: {face.addedBy}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm">
-                                      Added: {face.addedDate}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <Cloud className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm">
-                                      Sync Status:{" "}
-                                      {face.isSynced
-                                        ? "✓ Synced"
-                                        : "⏳ Pending"}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
+                            ) : (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleMoveToTrusted(face.id, face.name)
+                                }
+                              >
+                                <UserCheck className="w-4 h-4 mr-2" />
+                                Move to Trusted
+                              </DropdownMenuItem>
+                            )}
 
-                          {/* Fixed: Added confirmation dialog for delete */}
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem
-                                className="text-danger"
-                                onSelect={(e) => e.preventDefault()}
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle className="flex items-center gap-2">
-                                  <AlertCircle className="w-5 h-5 text-danger" />
-                                  Delete {face.name}?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete this face?
-                                  This action cannot be undone and
-                                  {face.name} will need to be re-added to gain
-                                  access again.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(face.name)}
-                                  className="bg-danger hover:bg-danger/90"
+                            {/* Enhanced: View Details Dialog */}
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <DropdownMenuItem
+                                  onSelect={(e) => e.preventDefault()}
                                 >
-                                  Delete Face
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle className="flex items-center gap-2">
+                                    <span className="text-2xl">
+                                      {face.avatar}
+                                    </span>
+                                    {face.name} Details
+                                  </DialogTitle>
+                                  <DialogDescription>
+                                    Complete information about this recognized
+                                    face
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="text-sm font-medium">
+                                        Match Confidence
+                                      </label>
+                                      <p className="text-lg font-bold text-primary">
+                                        {face.matchConfidence}%
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <label className="text-sm font-medium">
+                                        Status
+                                      </label>
+                                      <p
+                                        className={`font-semibold ${face.trusted ? "text-success" : "text-danger"}`}
+                                      >
+                                        {face.trusted ? "Trusted" : "Blocked"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="w-4 h-4 text-muted-foreground" />
+                                      <span className="text-sm">
+                                        Last seen: {face.lastSeen}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Smartphone className="w-4 h-4 text-muted-foreground" />
+                                      <span className="text-sm">
+                                        Added by: {face.addedBy}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                                      <span className="text-sm">
+                                        Added: {face.addedDate}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Cloud className="w-4 h-4 text-muted-foreground" />
+                                      <span className="text-sm">
+                                        Sync Status:{" "}
+                                        {face.isSynced
+                                          ? "✓ Synced"
+                                          : "⏳ Pending"}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+
+                            {/* Fixed: Added confirmation dialog for delete */}
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <DropdownMenuItem
+                                  className="text-danger"
+                                  onSelect={(e) => e.preventDefault()}
+                                >
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="flex items-center gap-2">
+                                    <AlertCircle className="w-5 h-5 text-danger" />
+                                    Delete {face.name}?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete this face?
+                                    This action cannot be undone and
+                                    {face.name} will need to be re-added to gain
+                                    access again.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDelete(face.name)}
+                                    className="bg-danger hover:bg-danger/90"
+                                  >
+                                    Delete Face
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -512,6 +518,172 @@ export default function ManageFaces() {
           </div>
         </div>
       </div>
+
+      {/* Bottom Sheet for Face Details */}
+      <Sheet
+        open={!!selectedFace}
+        onOpenChange={(open) => !open && setSelectedFace(null)}
+      >
+        <SheetContent side="bottom" className="h-[60vh]">
+          {selectedFace && (
+            <>
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-3 text-left">
+                  <span className="text-3xl">{selectedFace.avatar}</span>
+                  <div>
+                    <h2 className="text-xl font-bold">{selectedFace.name}</h2>
+                    <p className="text-muted-foreground font-normal">
+                      {selectedFace.trusted ? "Trusted Face" : "Blocked Face"}
+                    </p>
+                  </div>
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="mt-6 space-y-6">
+                {/* Status and Confidence */}
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Match Confidence
+                    </label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="flex-1 bg-muted rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full ${
+                            selectedFace.matchConfidence >= 90
+                              ? "bg-success"
+                              : selectedFace.matchConfidence >= 75
+                                ? "bg-warning"
+                                : "bg-danger"
+                          }`}
+                          style={{ width: `${selectedFace.matchConfidence}%` }}
+                        />
+                      </div>
+                      <span className="text-lg font-bold text-primary">
+                        {selectedFace.matchConfidence}%
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </label>
+                    <div className="flex items-center gap-2 mt-1">
+                      {selectedFace.trusted ? (
+                        <>
+                          <Check className="w-5 h-5 text-success" />
+                          <span className="font-semibold text-success text-lg">
+                            Trusted
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <X className="w-5 h-5 text-danger" />
+                          <span className="font-semibold text-danger text-lg">
+                            Blocked
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                    <Clock className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Last Seen</p>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedFace.lastSeen}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                    <Smartphone className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Added By Device</p>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedFace.addedBy}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                    <Calendar className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Date Added</p>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedFace.addedDate}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                    <Cloud className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Sync Status</p>
+                      <p
+                        className={`text-sm font-medium ${
+                          selectedFace.isSynced
+                            ? "text-success"
+                            : "text-warning"
+                        }`}
+                      >
+                        {selectedFace.isSynced
+                          ? "✓ Synced to Cloud"
+                          : "⏳ Sync Pending"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      handleStartEdit(selectedFace);
+                      setSelectedFace(null);
+                    }}
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Rename
+                  </Button>
+
+                  {selectedFace.trusted ? (
+                    <Button
+                      variant="outline"
+                      className="flex-1 text-danger border-danger hover:bg-danger hover:text-white"
+                      onClick={() => {
+                        handleBlock(selectedFace.id, selectedFace.name);
+                        setSelectedFace(null);
+                      }}
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Block
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="flex-1 text-success border-success hover:bg-success hover:text-white"
+                      onClick={() => {
+                        handleMoveToTrusted(selectedFace.id, selectedFace.name);
+                        setSelectedFace(null);
+                      }}
+                    >
+                      <UserCheck className="w-4 h-4 mr-2" />
+                      Move to Trusted
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </TooltipProvider>
   );
 }
