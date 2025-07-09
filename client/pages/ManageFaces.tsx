@@ -62,7 +62,6 @@ export default function ManageFaces() {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingName, setEditingName] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
-  const [selectedFace, setSelectedFace] = useState<any | null>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   const faces = [
