@@ -267,73 +267,74 @@ export default function ManageFaces() {
                             </Tooltip>
                           )}
                         </div>
-                                                <div className="flex-1 min-w-0">
-                              <div className="flex items-center space-x-2 flex-wrap">
-                                {editingName === face.id ? (
-                                  <Input
-                                    value={editValue}
-                                    onChange={(e) =>
-                                      setEditValue(e.target.value)
+                                                                        <div className="flex-1 min-w-0">
+                          <>
+                            <div className="flex items-center space-x-2 flex-wrap">
+                              {editingName === face.id ? (
+                                <Input
+                                  value={editValue}
+                                  onChange={(e) =>
+                                    setEditValue(e.target.value)
+                                  }
+                                  className="h-7 text-base font-semibold bg-transparent border-primary/50 focus:border-primary"
+                                  onBlur={() => {
+                                    if (editValue.trim()) {
+                                      handleSaveEdit(face.id);
+                                    } else {
+                                      handleCancelEdit();
                                     }
-                                    className="h-7 text-base font-semibold bg-transparent border-primary/50 focus:border-primary"
-                                    onBlur={() => {
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
                                       if (editValue.trim()) {
                                         handleSaveEdit(face.id);
                                       } else {
                                         handleCancelEdit();
                                       }
-                                    }}
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter") {
-                                        if (editValue.trim()) {
-                                          handleSaveEdit(face.id);
-                                        } else {
-                                          handleCancelEdit();
-                                        }
-                                      } else if (e.key === "Escape") {
-                                        handleCancelEdit();
-                                      }
-                                    }}
-                                    autoFocus
-                                    onClick={(e) => e.stopPropagation()}
-                                  />
-                                ) : (
-                                  <h3 className="font-semibold text-foreground truncate">
-                                    {face.name}
-                                  </h3>
-                                )}
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs whitespace-nowrap"
-                                >
-                                  {face.matchConfidence}% match
-                                </Badge>
-                              </div>
-                              <div className="flex items-center space-x-1 flex-wrap">
-                                {face.trusted ? (
-                                  <>
-                                    <Check className="w-4 h-4 text-success" />
-                                    <span className="text-sm text-success">
-                                      Trusted
-                                    </span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <X className="w-4 h-4 text-danger" />
-                                    <span className="text-sm text-danger">
-                                      Blocked
-                                    </span>
-                                  </>
-                                )}
-                                <span className="text-xs text-muted-foreground ml-2 truncate">
-                                  Last seen: {face.lastSeen}
-                                </span>
-                              </div>
-                              <div className="text-xs text-muted-foreground/70 mt-1">
-                                Tap to view details
-                              </div>
-                            </>
-                          )}
+                                    } else if (e.key === "Escape") {
+                                      handleCancelEdit();
+                                    }
+                                  }}
+                                  autoFocus
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              ) : (
+                                <h3 className="font-semibold text-foreground truncate">
+                                  {face.name}
+                                </h3>
+                              )}
+                              <Badge
+                                variant="outline"
+                                className="text-xs whitespace-nowrap"
+                              >
+                                {face.matchConfidence}% match
+                              </Badge>
+                            </div>
+                            <div className="flex items-center space-x-1 flex-wrap">
+                              {face.trusted ? (
+                                <>
+                                  <Check className="w-4 h-4 text-success" />
+                                  <span className="text-sm text-success">
+                                    Trusted
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <X className="w-4 h-4 text-danger" />
+                                  <span className="text-sm text-danger">
+                                    Blocked
+                                  </span>
+                                </>
+                              )}
+                              <span className="text-xs text-muted-foreground ml-2 truncate">
+                                Last seen: {face.lastSeen}
+                              </span>
+                            </div>
+                            <div className="text-xs text-muted-foreground/70 mt-1">
+                              Tap to view details
+                            </div>
+                          </>
+                        </div>
                         </div>
                       </div>
 
