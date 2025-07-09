@@ -18,6 +18,8 @@ import {
   Clock,
   Smartphone,
   Calendar,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
@@ -61,6 +63,7 @@ export default function ManageFaces() {
   const [editingName, setEditingName] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [selectedFace, setSelectedFace] = useState<any | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
   const faces = [
     {
@@ -239,17 +242,17 @@ export default function ManageFaces() {
               {filteredFaces.map((face) => (
                 <Card
                   key={face.id}
-                  className={`bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-md cursor-pointer ${
+                  className={`w-full bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200 hover:shadow-md cursor-pointer ${
                     face.trusted
                       ? "border-l-4 border-l-success"
                       : "border-l-4 border-l-danger"
                   }`}
                   onClick={() => setSelectedFace(face)}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="relative">
+                  <CardContent className="p-4 w-full">
+                    <div className="flex items-center w-full">
+                      <div className="flex items-center space-x-3 flex-1 min-w-0">
+                        <div className="relative flex-shrink-0">
                           <div className="w-12 h-12 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center text-xl">
                             {face.avatar}
                           </div>
@@ -264,13 +267,16 @@ export default function ManageFaces() {
                             </Tooltip>
                           )}
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           {editingName === face.id ? (
-                            <div className="flex items-center space-x-2">
+                            <div
+                              className="flex items-center space-x-2"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <Input
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
-                                className="h-8 text-sm"
+                                className="h-8 text-sm flex-1"
                                 autoFocus
                               />
                               <Button
@@ -289,15 +295,18 @@ export default function ManageFaces() {
                             </div>
                           ) : (
                             <>
-                              <div className="flex items-center space-x-2">
-                                <h3 className="font-semibold text-foreground">
+                              <div className="flex items-center space-x-2 flex-wrap">
+                                <h3 className="font-semibold text-foreground truncate">
                                   {face.name}
                                 </h3>
-                                <Badge variant="outline" className="text-xs">
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs whitespace-nowrap"
+                                >
                                   {face.matchConfidence}% match
                                 </Badge>
                               </div>
-                              <div className="flex items-center space-x-1">
+                              <div className="flex items-center space-x-1 flex-wrap">
                                 {face.trusted ? (
                                   <>
                                     <Check className="w-4 h-4 text-success" />
@@ -313,7 +322,7 @@ export default function ManageFaces() {
                                     </span>
                                   </>
                                 )}
-                                <span className="text-xs text-muted-foreground ml-2">
+                                <span className="text-xs text-muted-foreground ml-2 truncate">
                                   Last seen: {face.lastSeen}
                                 </span>
                               </div>
@@ -325,18 +334,29 @@ export default function ManageFaces() {
                         </div>
                       </div>
 
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenu>
+                      <div
+                        className="flex-shrink-0 ml-2"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <DropdownMenu
+                          onOpenChange={(open) =>
+                            setOpenDropdown(open ? face.id : null)
+                          }
+                        >
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="rounded-full"
+                              className="rounded-full h-8 w-8 transition-all duration-200 hover:bg-primary/10"
                             >
-                              <MoreVertical className="w-4 h-4" />
+                              {openDropdown === face.id ? (
+                                <ChevronUp className="w-4 h-4 text-primary" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                              )}
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem
                               onClick={() => handleStartEdit(face)}
                             >
