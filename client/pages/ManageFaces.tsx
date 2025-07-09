@@ -539,7 +539,7 @@ export default function ManageFaces() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="w-full mt-2 text-muted-foreground"
+                          className="w-full h-8 text-xs text-muted-foreground"
                           onClick={() => setExpandedCard(null)}
                         >
                           Close
