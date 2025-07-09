@@ -150,8 +150,11 @@ export default function GuestMode() {
                   <div className="flex items-center justify-center space-x-2 text-success">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm font-medium">
-                      Active for {timeLimit} minutes
+                      {getDisplayTime()} minutes remaining
                     </span>
+                  </div>
+                  <div className="text-xs text-success/70 text-center mt-1">
+                    Will auto-disable when time expires
                   </div>
                 </div>
               )}
