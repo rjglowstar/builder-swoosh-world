@@ -136,7 +136,7 @@ export default function Pricing() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Header */}
         <div className="text-center space-y-3">
           <h2 className="text-2xl font-bold text-foreground">
