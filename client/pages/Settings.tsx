@@ -24,6 +24,7 @@ export default function Settings() {
       icon: User,
       items: [
         { name: "Profile", path: "/profile" },
+        { name: "Device Management", path: "/device-management" },
         { name: "Subscription", path: "/subscription", premium: true },
         { name: "Sync Settings", path: "/sync", premium: true },
       ],
