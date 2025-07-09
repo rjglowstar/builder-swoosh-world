@@ -170,7 +170,10 @@ export default function Dashboard() {
           to: "/guest-mode",
           icon: Clock,
           label: "Guest Mode",
-          desc: `${dashboardData.protection.guestMode.remainingMinutes}m remaining`,
+          desc:
+            dashboardData.protection.guestMode.timeLimit === "unlimited"
+              ? "No time limit - turn OFF manually"
+              : `${dashboardData.protection.guestMode.remainingMinutes}m remaining`,
           priority: true,
         },
         ...quickActions,
