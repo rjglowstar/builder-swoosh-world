@@ -25,6 +25,7 @@ import Sensitivity from "./pages/Sensitivity";
 import SyncSetup from "./pages/SyncSetup";
 import WidgetSetup from "./pages/WidgetSetup";
 import Notifications from "./pages/Notifications";
+import GuestMode from "./pages/GuestMode";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/sync" element={<SyncSetup />} />
           <Route path="/widget-setup" element={<WidgetSetup />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/guest-mode" element={<GuestMode />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
