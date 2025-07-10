@@ -562,7 +562,7 @@ export default function SyncSetup() {
                 </div>
               </div>
               <Link to="/pricing">
-                <Button className="w-full h-12 rounded-xl text-base font-semibold">
+                <Button className="w-full h-12 rounded-xl text-base font-semibold mt-2">
                   <Crown className="w-4 h-4 mr-2" />
                   Upgrade to Premium Plus
                 </Button>
