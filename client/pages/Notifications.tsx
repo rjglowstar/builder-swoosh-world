@@ -167,7 +167,7 @@ export default function Notifications() {
                 onClick={() => handleMarkAsRead(notification.id)}
               >
                 <Card
-                  className={`${notification.bgColor} ${notification.borderColor} hover:scale-[1.02] transition-all duration-200 cursor-pointer ${
+                  className={`${notification.bgColor} ${notification.borderColor} hover:scale-[1.02] transition-all duration-200 cursor-pointer shadow-sm ${
                     !notification.read ? "ring-2 ring-primary/20" : ""
                   }`}
                 >
