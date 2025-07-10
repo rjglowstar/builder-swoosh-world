@@ -159,55 +159,55 @@ export default function Notifications() {
       <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Notifications List */}
         {notifications.length > 0 ? (
-          <div className="space-y-0">
+          <div className="space-y-2">
             {notifications.map((notification) => (
               <div className="d-block mb-2">
-              <Link
-                key={notification.id}
-                to={notification.action}
-                onClick={() => handleMarkAsRead(notification.id)}
-              >
-                <Card
-                  className={`${notification.bgColor} ${notification.borderColor} hover:scale-[1.02] transition-all duration-200 cursor-pointer shadow-sm ${
-                    !notification.read ? "ring-2 ring-primary/20" : ""
-                  }`}
+                <Link
+                  key={notification.id}
+                  to={notification.action}
+                  onClick={() => handleMarkAsRead(notification.id)}
                 >
-                  <CardContent className="p-5">
-                    <div className="flex items-start space-x-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${notification.bgColor} ${notification.borderColor} border`}
-                      >
-                        <notification.icon
-                          className={`w-5 h-5 ${notification.iconColor}`}
-                        />
-                      </div>
+                  <Card
+                    className={`${notification.bgColor} ${notification.borderColor} hover:scale-[1.02] transition-all duration-200 cursor-pointer shadow-sm ${
+                      !notification.read ? "ring-2 ring-primary/20" : ""
+                    }`}
+                  >
+                    <CardContent className="p-5">
+                      <div className="flex items-start space-x-3">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center ${notification.bgColor} ${notification.borderColor} border`}
+                        >
+                          <notification.icon
+                            className={`w-5 h-5 ${notification.iconColor}`}
+                          />
+                        </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3
-                              className={`font-semibold ${notification.iconColor} ${
-                                !notification.read ? "font-bold" : ""
-                              }`}
-                            >
-                              {notification.title}
-                            </h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {notification.description}
-                            </p>
-                            <p className="text-xs text-muted-foreground mt-2">
-                              {notification.timestamp}
-                            </p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h3
+                                className={`font-semibold ${notification.iconColor} ${
+                                  !notification.read ? "font-bold" : ""
+                                }`}
+                              >
+                                {notification.title}
+                              </h3>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {notification.description}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-2">
+                                {notification.timestamp}
+                              </p>
+                            </div>
+
+                            {!notification.read && (
+                              <div className="w-2 h-2 bg-primary rounded-full ml-2 mt-1 flex-shrink-0"></div>
+                            )}
                           </div>
-
-                          {!notification.read && (
-                            <div className="w-2 h-2 bg-primary rounded-full ml-2 mt-1 flex-shrink-0"></div>
-                          )}
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
                 </Link>
               </div>
             ))}
