@@ -165,6 +165,7 @@ export default function Notifications() {
                 key={notification.id}
                 to={notification.action}
                 onClick={() => handleMarkAsRead(notification.id)}
+                className="d-block"
               >
                 <Card
                   className={`${notification.bgColor} ${notification.borderColor} hover:scale-[1.02] transition-all duration-200 cursor-pointer shadow-sm ${
