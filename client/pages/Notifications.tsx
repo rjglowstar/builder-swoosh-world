@@ -133,9 +133,7 @@ export default function Notifications() {
             </Link>
             <div className="flex items-center space-x-2">
               <Bell className="w-6 h-6 text-primary" />
-              <h1 className="text-xl font-bold text-primary">
-                Notification Center
-              </h1>
+              <h1 className="text-xl font-bold text-primary">Notifications</h1>
               {unreadCount > 0 && (
                 <Badge className="bg-danger text-white text-xs px-2 py-0.5">
                   {unreadCount}
