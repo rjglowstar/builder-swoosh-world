@@ -12,7 +12,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Schedule() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -27,6 +27,8 @@ export default function Schedule() {
     false,
     false,
   ]);
+  const [notifyBeforeActivation, setNotifyBeforeActivation] = useState(false);
+  const [previewText, setPreviewText] = useState("");
 
   const days = ["M", "T", "W", "T", "F", "S", "S"];
   const dayNames = [
@@ -59,7 +61,30 @@ export default function Schedule() {
     setStartTime("22:00");
     setEndTime("07:00");
     setSelectedDays([true, true, true, true, true, false, false]);
+    setNotifyBeforeActivation(false);
   };
+
+  // Update preview text dynamically
+  useEffect(() => {
+    if (!isEnabled) {
+      setPreviewText("No schedule set — enable to configure time and days.");
+      return;
+    }
+
+    const selectedDayNames = selectedDays
+      .map((selected, index) => (selected ? dayNames[index] : null))
+      .filter(Boolean);
+
+    if (selectedDayNames.length === 0) {
+      setPreviewText(
+        "Face recognition protection will never activate - no days selected.",
+      );
+    } else {
+      setPreviewText(
+        `Face recognition protection will automatically activate every ${selectedDayNames.join(", ")} from ${startTime} to ${endTime}.`,
+      );
+    }
+  }, [isEnabled, startTime, endTime, selectedDays]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -143,9 +168,39 @@ export default function Schedule() {
           </CardContent>
         </Card>
 
+        {/* Preview - Always Visible */}
+        <Card
+          className={`${isEnabled ? "bg-primary/10 border-primary/20" : "bg-muted/10 border-muted/20"} transition-all duration-200`}
+        >
+          <CardContent className="p-4">
+            <div className="flex items-start space-x-3">
+              <Clock
+                className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isEnabled ? "text-primary" : "text-muted-foreground"}`}
+              />
+              <div className="space-y-1">
+                <h3
+                  className={`font-semibold ${isEnabled ? "text-primary" : "text-muted-foreground"}`}
+                >
+                  Schedule Preview
+                </h3>
+                <p
+                  className={`text-sm ${isEnabled ? "text-primary/80" : "text-muted-foreground"}`}
+                >
+                  {previewText}
+                </p>
+                {isEnabled && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Based on your device's time zone • Emergency PIN still works
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Time Settings */}
         {isEnabled && (
-          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200">
             <CardContent className="p-4 space-y-6">
               <h3 className="font-semibold text-foreground flex items-center space-x-2">
                 <Clock className="w-5 h-5" />
@@ -191,7 +246,7 @@ export default function Schedule() {
 
         {/* Days Selection */}
         {isEnabled && (
-          <Card className="bg-white/60 backdrop-blur-sm border-white/20">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200">
             <CardContent className="p-4 space-y-4">
               <h3 className="font-semibold text-foreground flex items-center space-x-2">
                 <Calendar className="w-5 h-5" />
@@ -225,29 +280,23 @@ export default function Schedule() {
           </Card>
         )}
 
-        {/* Preview */}
+        {/* Notification Settings */}
         {isEnabled && (
-          <Card className="bg-primary/10 border-primary/20">
+          <Card className="bg-white/60 backdrop-blur-sm border-white/20 transition-all duration-200">
             <CardContent className="p-4">
-              <div className="flex items-start space-x-3">
-                <Clock className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h3 className="font-semibold text-primary">
-                    Schedule Preview
-                  </h3>
-                  <p className="text-sm text-primary/80">
-                    Face recognition protection will automatically activate{" "}
-                    {selectedDays.filter(Boolean).length > 0
-                      ? `every ${selectedDays
-                          .map((selected, index) =>
-                            selected ? dayNames[index] : null,
-                          )
-                          .filter(Boolean)
-                          .join(", ")}`
-                      : "never"}{" "}
-                    from {startTime} to {endTime}.
+                  <Label className="text-foreground font-medium">
+                    Activation Reminder
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Notify me 10 minutes before protection activates
                   </p>
                 </div>
+                <Switch
+                  checked={notifyBeforeActivation}
+                  onCheckedChange={setNotifyBeforeActivation}
+                />
               </div>
             </CardContent>
           </Card>
@@ -257,10 +306,12 @@ export default function Schedule() {
         <div className="space-y-3">
           <Button
             onClick={handleSave}
-            className="w-full h-14 rounded-xl text-lg font-semibold"
+            className={`w-full h-14 rounded-xl text-lg font-semibold transition-all duration-200 ${
+              isEnabled ? "" : "opacity-50"
+            }`}
           >
             <Save className="w-5 h-5 mr-2" />
-            Save Schedule
+            {isEnabled ? "Save Schedule" : "Enable Schedule to Save"}
           </Button>
 
           <Button
