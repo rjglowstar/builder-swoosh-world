@@ -319,7 +319,7 @@ export default function DeviceManagement() {
                               size="icon"
                               className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary hover:bg-primary/10"
                             >
-                              <SwapHorizontal className="w-4 h-4" />
+                              <ArrowLeftRight className="w-4 h-4" />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
