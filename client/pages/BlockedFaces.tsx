@@ -8,6 +8,7 @@ import {
   RotateCcw,
   AlertTriangle,
   Download,
+  RefreshCw,
   Clock,
   Smartphone,
   Eye,
@@ -166,13 +167,13 @@ export default function BlockedFaces() {
                   variant="outline"
                   size="icon"
                   className="rounded-full"
-                  onClick={handleExport}
+                  onClick={() => window.location.reload()}
                 >
-                  <Download className="w-4 h-4" />
+                  <RefreshCw className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Export blocked faces log</p>
+                <p>Refresh blocked faces</p>
               </TooltipContent>
             </Tooltip>
           </div>
