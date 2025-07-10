@@ -253,7 +253,7 @@ export default function ManageFaces() {
                   <CardContent className="p-4 w-full">
                     <div className="flex items-center w-full">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
-                        <div className="relative flex-shrink-0">
+                        <div className="relative flex-shrink-0 flex items-center justify-center">
                           <div className="w-12 h-12 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center text-xl">
                             {face.avatar}
                           </div>
