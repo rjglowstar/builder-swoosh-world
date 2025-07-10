@@ -536,7 +536,7 @@ export default function SyncSetup() {
                 {/* Benefits Summary */}
                 <div className="bg-white/50 rounded-lg p-3 space-y-2">
                   <div className="flex items-center justify-center space-x-2">
-                    <Devices className="w-4 h-4 text-primary" />
+                    <Monitor className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium text-primary">
                       Sync up to 5 devices
                     </span>
