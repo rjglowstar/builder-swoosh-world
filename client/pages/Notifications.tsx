@@ -171,7 +171,7 @@ export default function Notifications() {
                     !notification.read ? "ring-2 ring-primary/20" : ""
                   }`}
                 >
-                  <CardContent className="p-4">
+                  <CardContent className="p-5">
                     <div className="flex items-start space-x-3">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center ${notification.bgColor} ${notification.borderColor} border`}
