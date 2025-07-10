@@ -465,7 +465,7 @@ export default function DeviceManagement() {
                 </p>
 
                 {/* Benefits Tooltip */}
-                <div className="bg-white/50 rounded-lg p-3 space-y-2">
+                <div className="bg-white/50 rounded-lg p-3 space-y-2 mt-2">
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
