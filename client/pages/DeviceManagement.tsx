@@ -490,7 +490,7 @@ export default function DeviceManagement() {
                 </div>
               </div>
               <Link to="/pricing">
-                <Button className="w-full h-10 rounded-xl">Upgrade Plan</Button>
+                <Button className="w-full h-10 rounded-xl mt-2">Upgrade Plan</Button>
               </Link>
             </CardContent>
           </Card>
