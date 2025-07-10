@@ -4,6 +4,12 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   ArrowLeft,
   Cloud,
   Smartphone,
@@ -13,6 +19,11 @@ import {
   Crown,
   Shield,
   Zap,
+  HelpCircle,
+  Wifi,
+  Lock,
+  Star,
+  Devices,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -21,6 +32,11 @@ export default function SyncSetup() {
   const [isSyncEnabled, setIsSyncEnabled] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
   const [lastSync, setLastSync] = useState("2024-01-15 14:30");
+  const [wifiOnlySync, setWifiOnlySync] = useState(true);
+  const [troubleshootingLogs, setTroubleshootingLogs] = useState<
+    Record<string, string>
+  >({});
+  const [expandedSyncItems, setExpandedSyncItems] = useState(false);
 
   const connectedDevices = [
     {
@@ -29,6 +45,8 @@ export default function SyncSetup() {
       type: "iOS",
       lastSync: "2024-01-15 14:30",
       status: "synced",
+      isPrimary: true,
+      lastSyncTime: "Today at 2:30 PM",
     },
     {
       id: 2,
@@ -36,6 +54,8 @@ export default function SyncSetup() {
       type: "macOS",
       lastSync: "2024-01-15 12:15",
       status: "synced",
+      isPrimary: false,
+      lastSyncTime: "Today at 12:15 PM",
     },
     {
       id: 3,
@@ -43,6 +63,8 @@ export default function SyncSetup() {
       type: "iOS",
       lastSync: "2024-01-14 18:45",
       status: "pending",
+      isPrimary: false,
+      lastSyncTime: "Yesterday at 6:45 PM",
     },
   ];
 
@@ -59,6 +81,76 @@ export default function SyncSetup() {
       console.log("Sync disabled");
     }
   };
+
+  const handleTroubleshootingAction = (action: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    let logMessage = "";
+
+    switch (action) {
+      case "reset":
+        logMessage = `Sync connection reset at ${timestamp}`;
+        break;
+      case "force":
+        logMessage = `Full sync forced at ${timestamp}`;
+        break;
+      case "status":
+        logMessage = `Status check completed at ${timestamp} - All good ✓`;
+        break;
+    }
+
+    setTroubleshootingLogs((prev) => ({
+      ...prev,
+      [action]: logMessage,
+    }));
+
+    // Clear log after 5 seconds
+    setTimeout(() => {
+      setTroubleshootingLogs((prev) => {
+        const newLogs = { ...prev };
+        delete newLogs[action];
+        return newLogs;
+      });
+    }, 5000);
+  };
+
+  const syncItems = [
+    {
+      name: "Trusted face profiles",
+      icon: "👤",
+      tooltip:
+        "Your registered face data and biometric templates - securely encrypted and synced across devices",
+    },
+    {
+      name: "Blocked faces list",
+      icon: "🚫",
+      tooltip:
+        "List of blocked/untrusted faces that should be denied access on all devices",
+    },
+    {
+      name: "Security settings",
+      icon: "⚙️",
+      tooltip:
+        "Your sensitivity levels, detection preferences, and security configurations",
+    },
+    {
+      name: "Protection schedules",
+      icon: "⏰",
+      tooltip:
+        "Automated protection time schedules and when face recognition should be active",
+    },
+    {
+      name: "Unlock history logs",
+      icon: "📊",
+      tooltip:
+        "Complete access logs showing when and where face recognition was used",
+    },
+    {
+      name: "App preferences",
+      icon: "🎛️",
+      tooltip:
+        "Your personal app settings, themes, and user interface preferences",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -191,6 +283,26 @@ export default function SyncSetup() {
                     </div>
                   </div>
 
+                  {/* WiFi Only Sync Option */}
+                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <Wifi className="w-4 h-4 text-primary" />
+                      <div>
+                        <Label className="text-sm font-medium">
+                          WiFi Only Sync
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          Save mobile data
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={wifiOnlySync}
+                      onCheckedChange={setWifiOnlySync}
+                      size="sm"
+                    />
+                  </div>
+
                   <Button
                     onClick={handleSync}
                     variant="outline"
@@ -218,27 +330,57 @@ export default function SyncSetup() {
                 {connectedDevices.map((device) => (
                   <div
                     key={device.id}
-                    className="flex items-center justify-between p-3 bg-white/40 rounded-lg"
+                    className={`p-3 rounded-lg border transition-all duration-200 ${
+                      device.isPrimary
+                        ? "bg-primary/5 border-primary/20"
+                        : "bg-white/40 border-white/20"
+                    }`}
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
-                        <Smartphone className="w-4 h-4 text-primary" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                            device.isPrimary ? "bg-primary/20" : "bg-slate-200"
+                          }`}
+                        >
+                          <Smartphone
+                            className={`w-4 h-4 ${
+                              device.isPrimary
+                                ? "text-primary"
+                                : "text-slate-600"
+                            }`}
+                          />
+                        </div>
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-medium text-foreground">
+                              {device.name}
+                            </h4>
+                            {device.isPrimary && (
+                              <Badge
+                                variant="secondary"
+                                className="text-xs px-2 py-0"
+                              >
+                                <Star className="w-3 h-3 mr-1" />
+                                Primary
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {device.type} • {device.lastSync}
+                          </p>
+                          <p className="text-xs text-primary font-medium">
+                            Last synced: {device.lastSyncTime}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-medium text-foreground">
-                          {device.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground">
-                          {device.type} • {device.lastSync}
-                        </p>
+                      <div className="flex items-center space-x-2">
+                        {device.status === "synced" ? (
+                          <Check className="w-4 h-4 text-success" />
+                        ) : (
+                          <div className="w-2 h-2 bg-warning rounded-full animate-pulse"></div>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      {device.status === "synced" ? (
-                        <Check className="w-4 h-4 text-success" />
-                      ) : (
-                        <div className="w-2 h-2 bg-warning rounded-full animate-pulse"></div>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -259,20 +401,44 @@ export default function SyncSetup() {
             </h3>
 
             <div className="space-y-3">
-              {[
-                { name: "Trusted face profiles", icon: "👤" },
-                { name: "Blocked faces list", icon: "🚫" },
-                { name: "Security settings", icon: "⚙️" },
-                { name: "Protection schedules", icon: "⏰" },
-                { name: "Unlock history logs", icon: "📊" },
-                { name: "App preferences", icon: "🎛️" },
-              ].map((item, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <span className="text-lg">{item.icon}</span>
-                  <span className="text-foreground">{item.name}</span>
-                  <Check className="w-4 h-4 text-success ml-auto" />
-                </div>
-              ))}
+              <TooltipProvider>
+                {syncItems
+                  .slice(0, expandedSyncItems ? syncItems.length : 3)
+                  .map((item, index) => (
+                    <Tooltip key={index}>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-help">
+                          <span className="text-lg">{item.icon}</span>
+                          <span className="text-foreground flex-1">
+                            {item.name}
+                          </span>
+                          <HelpCircle className="w-3 h-3 text-muted-foreground" />
+                          {isSyncEnabled ? (
+                            <Check className="w-4 h-4 text-success" />
+                          ) : (
+                            <Lock className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="text-sm">{item.tooltip}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+              </TooltipProvider>
+
+              {syncItems.length > 3 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setExpandedSyncItems(!expandedSyncItems)}
+                  className="w-full h-8 text-xs"
+                >
+                  {expandedSyncItems
+                    ? "Show Less"
+                    : `Show ${syncItems.length - 3} More Items`}
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -301,28 +467,54 @@ export default function SyncSetup() {
             <CardContent className="p-4 space-y-4">
               <h3 className="font-semibold text-foreground">Troubleshoot</h3>
 
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full h-10 rounded-xl justify-start"
-                >
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Reset Sync Connection
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 rounded-xl justify-start"
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Force Full Sync
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 rounded-xl justify-start"
-                >
-                  <Zap className="w-4 h-4 mr-2" />
-                  Check Sync Status
-                </Button>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 rounded-xl justify-start"
+                    onClick={() => handleTroubleshootingAction("reset")}
+                  >
+                    <AlertTriangle className="w-4 h-4 mr-2" />
+                    Reset Sync Connection
+                  </Button>
+                  {troubleshootingLogs.reset && (
+                    <div className="ml-6 p-2 bg-slate-50 rounded text-xs text-muted-foreground">
+                      {troubleshootingLogs.reset}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 rounded-xl justify-start"
+                    onClick={() => handleTroubleshootingAction("force")}
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Force Full Sync
+                  </Button>
+                  {troubleshootingLogs.force && (
+                    <div className="ml-6 p-2 bg-slate-50 rounded text-xs text-muted-foreground">
+                      {troubleshootingLogs.force}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 rounded-xl justify-start"
+                    onClick={() => handleTroubleshootingAction("status")}
+                  >
+                    <Zap className="w-4 h-4 mr-2" />
+                    Check Sync Status
+                  </Button>
+                  {troubleshootingLogs.status && (
+                    <div className="ml-6 p-2 bg-success/10 rounded text-xs text-success">
+                      {troubleshootingLogs.status}
+                    </div>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -331,18 +523,47 @@ export default function SyncSetup() {
         {/* Upgrade Notice */}
         {!isSyncEnabled && (
           <Card className="bg-gradient-to-r from-primary/10 to-blue-100/50 border-primary/20">
-            <CardContent className="p-4 text-center space-y-3">
-              <Crown className="w-8 h-8 text-primary mx-auto" />
-              <div>
-                <h3 className="font-semibold text-primary">
+            <CardContent className="p-5 text-center space-y-4">
+              <Crown className="w-10 h-10 text-primary mx-auto" />
+              <div className="space-y-2">
+                <h3 className="font-semibold text-primary text-lg">
                   Premium Plus Feature
                 </h3>
                 <p className="text-sm text-primary/80">
                   Cross-device sync requires Premium Plus subscription
                 </p>
+
+                {/* Benefits Summary */}
+                <div className="bg-white/50 rounded-lg p-3 space-y-2">
+                  <div className="flex items-center justify-center space-x-2">
+                    <Devices className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">
+                      Sync up to 5 devices
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-primary/80">
+                    <div className="flex items-center space-x-1">
+                      <Check className="w-3 h-3" />
+                      <span>Face profiles</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Check className="w-3 h-3" />
+                      <span>Security logs</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Check className="w-3 h-3" />
+                      <span>All settings</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Shield className="w-3 h-3" />
+                      <span>Encrypted</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <Link to="/pricing">
-                <Button className="w-full h-10 rounded-xl">
+                <Button className="w-full h-12 rounded-xl text-base font-semibold">
+                  <Crown className="w-4 h-4 mr-2" />
                   Upgrade to Premium Plus
                 </Button>
               </Link>
