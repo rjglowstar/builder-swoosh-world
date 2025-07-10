@@ -2,18 +2,35 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   ArrowLeft,
   Sliders,
   Eye,
   AlertTriangle,
   Save,
   RotateCcw,
+  HelpCircle,
+  Shield,
+  Sun,
+  Lightbulb,
+  CheckCircle,
+  XCircle,
+  Target,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function Sensitivity() {
   const [sensitivity, setSensitivity] = useState([0.85]);
+  const [testResult, setTestResult] = useState<"success" | "failure" | null>(
+    null,
+  );
+  const [isTestingInProgress, setIsTestingInProgress] = useState(false);
   const defaultSensitivity = 0.85;
 
   const getSensitivityLevel = (value: number) => {
@@ -64,6 +81,49 @@ export default function Sensitivity() {
     return "Maximum security - Very strict matching, may require perfect conditions";
   };
 
+  const getConditionEmoji = (value: number, condition: string) => {
+    switch (condition) {
+      case "perfect":
+        return "😊";
+      case "glasses":
+        return value > 0.9 ? "😕" : "😊";
+      case "lowlight":
+        return value > 0.85 ? "😐" : "😊";
+      case "angle":
+        return value > 0.8 ? "😕" : "😐";
+      default:
+        return "😊";
+    }
+  };
+
+  const getSuggestedConditions = (value: number) => {
+    if (value < 0.75)
+      return "Works best: Any lighting, with/without accessories, various angles";
+    if (value < 0.85)
+      return "Works best: Normal lighting, minor accessories okay, front-facing";
+    if (value < 0.95)
+      return "Works best: Good lighting, minimal accessories, clear front view";
+    return "Works best: Bright lighting, no accessories, direct front view";
+  };
+
+  const handleTestDetection = async () => {
+    setIsTestingInProgress(true);
+    setTestResult(null);
+
+    // Simulate test detection
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Simulate result based on sensitivity (higher sensitivity = lower success rate)
+    const successRate = Math.max(0.3, 1 - (sensitivity[0] - 0.65) * 1.5);
+    const isSuccess = Math.random() < successRate;
+
+    setTestResult(isSuccess ? "success" : "failure");
+    setIsTestingInProgress(false);
+
+    // Clear result after 3 seconds
+    setTimeout(() => setTestResult(null), 3000);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -100,9 +160,26 @@ export default function Sensitivity() {
                   <h3 className={`font-semibold ${currentLevel.color}`}>
                     {currentLevel.level} Sensitivity
                   </h3>
-                  <p className={`text-sm ${currentLevel.color}/80`}>
-                    {(sensitivity[0] * 100).toFixed(0)}% match threshold
-                  </p>
+                  <div className="flex items-center space-x-2">
+                    <p className={`text-sm ${currentLevel.color}/80`}>
+                      {(sensitivity[0] * 100).toFixed(0)}% match threshold
+                    </p>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-primary cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p className="text-sm">
+                            Match threshold determines how similar a face must
+                            be to your registered face to unlock. Higher % =
+                            stricter matching = more secure but may require
+                            better conditions.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,6 +212,42 @@ export default function Sensitivity() {
                   <div className="flex justify-between text-xs text-muted-foreground mt-2">
                     <span>Low (65%)</span>
                     <span>High (99%)</span>
+                  </div>
+                </div>
+
+                {/* Live Preview Effect */}
+                <div
+                  className="p-3 rounded-lg border-2 border-dashed transition-all duration-300"
+                  style={{
+                    borderColor: currentLevel.color.includes("success")
+                      ? "rgb(34 197 94)"
+                      : currentLevel.color.includes("warning")
+                        ? "rgb(245 158 11)"
+                        : currentLevel.color.includes("danger")
+                          ? "rgb(239 68 68)"
+                          : "rgb(59 130 246)",
+                    backgroundColor: currentLevel.color.includes("success")
+                      ? "rgb(34 197 94 / 0.1)"
+                      : currentLevel.color.includes("warning")
+                        ? "rgb(245 158 11 / 0.1)"
+                        : currentLevel.color.includes("danger")
+                          ? "rgb(239 68 68 / 0.1)"
+                          : "rgb(59 130 246 / 0.1)",
+                  }}
+                >
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">
+                      {sensitivity[0] < 0.75
+                        ? "😌"
+                        : sensitivity[0] < 0.85
+                          ? "😊"
+                          : sensitivity[0] < 0.95
+                            ? "🔒"
+                            : "🛡️"}
+                    </div>
+                    <p className="text-sm font-medium">
+                      {getSuggestedConditions(sensitivity[0])}
+                    </p>
                   </div>
                 </div>
 
@@ -187,26 +300,46 @@ export default function Sensitivity() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-success rounded-full"></div>
+                <div className="flex items-center space-x-2 transition-all duration-300">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-success rounded-full"></div>
+                    <span className="text-lg">
+                      {getConditionEmoji(sensitivity[0], "perfect")}
+                    </span>
+                  </div>
                   <span>Perfect conditions</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${sensitivity[0] > 0.9 ? "bg-danger" : "bg-success"}`}
-                  ></div>
+                <div className="flex items-center space-x-2 transition-all duration-300">
+                  <div className="flex items-center space-x-1">
+                    <div
+                      className={`w-2 h-2 rounded-full transition-colors duration-300 ${sensitivity[0] > 0.9 ? "bg-danger" : "bg-success"}`}
+                    ></div>
+                    <span className="text-lg">
+                      {getConditionEmoji(sensitivity[0], "glasses")}
+                    </span>
+                  </div>
                   <span>With glasses</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${sensitivity[0] > 0.85 ? "bg-warning" : "bg-success"}`}
-                  ></div>
+                <div className="flex items-center space-x-2 transition-all duration-300">
+                  <div className="flex items-center space-x-1">
+                    <div
+                      className={`w-2 h-2 rounded-full transition-colors duration-300 ${sensitivity[0] > 0.85 ? "bg-warning" : "bg-success"}`}
+                    ></div>
+                    <span className="text-lg">
+                      {getConditionEmoji(sensitivity[0], "lowlight")}
+                    </span>
+                  </div>
                   <span>Low light</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${sensitivity[0] > 0.8 ? "bg-danger" : "bg-warning"}`}
-                  ></div>
+                <div className="flex items-center space-x-2 transition-all duration-300">
+                  <div className="flex items-center space-x-1">
+                    <div
+                      className={`w-2 h-2 rounded-full transition-colors duration-300 ${sensitivity[0] > 0.8 ? "bg-danger" : "bg-warning"}`}
+                    ></div>
+                    <span className="text-lg">
+                      {getConditionEmoji(sensitivity[0], "angle")}
+                    </span>
+                  </div>
                   <span>Different angle</span>
                 </div>
               </div>
@@ -235,11 +368,54 @@ export default function Sensitivity() {
 
         {/* Test Detection */}
         <Card className="bg-white/40 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4">
-            <Button variant="outline" className="w-full h-12 rounded-xl">
-              <Eye className="w-4 h-4 mr-2" />
-              Test Detection with Current Settings
-            </Button>
+          <CardContent className="p-4 space-y-3">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full h-12 rounded-xl"
+                    onClick={handleTestDetection}
+                    disabled={isTestingInProgress}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    {isTestingInProgress
+                      ? "Testing..."
+                      : "Test Detection with Current Settings"}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Try unlocking with current setting before saving</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            {/* Test Result Feedback */}
+            {testResult && (
+              <div
+                className={`flex items-center justify-center space-x-2 p-3 rounded-lg transition-all duration-500 ${
+                  testResult === "success"
+                    ? "bg-success/10 border border-success/20"
+                    : "bg-danger/10 border border-danger/20"
+                }`}
+              >
+                {testResult === "success" ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 text-success" />
+                    <span className="text-sm font-medium text-success">
+                      ✅ Face match success!
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="w-5 h-5 text-danger" />
+                    <span className="text-sm font-medium text-danger">
+                      ❌ Try again - consider adjusting sensitivity
+                    </span>
+                  </>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -269,26 +445,43 @@ export default function Sensitivity() {
             <h3 className="font-semibold text-foreground mb-3">
               Optimization Tips
             </h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-start space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                <span>
-                  Higher sensitivity = better security, but may require better
-                  lighting
-                </span>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="flex items-start space-x-3">
+                <div className="flex items-center justify-center w-8 h-8 bg-success/10 rounded-full flex-shrink-0">
+                  <Shield className="w-4 h-4 text-success" />
+                </div>
+                <div>
+                  <span className="font-medium text-foreground">
+                    Higher sensitivity
+                  </span>
+                  <p className="text-xs">
+                    🔒 Better security + 🌞 Requires good lighting
+                  </p>
+                </div>
               </li>
-              <li className="flex items-start space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                <span>
-                  Lower sensitivity = easier access, but less secure against
-                  similar faces
-                </span>
+              <li className="flex items-start space-x-3">
+                <div className="flex items-center justify-center w-8 h-8 bg-warning/10 rounded-full flex-shrink-0">
+                  <Target className="w-4 h-4 text-warning" />
+                </div>
+                <div>
+                  <span className="font-medium text-foreground">
+                    Lower sensitivity
+                  </span>
+                  <p className="text-xs">
+                    😌 Easier access + ⚠️ Less secure against similar faces
+                  </p>
+                </div>
               </li>
-              <li className="flex items-start space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                <span>
-                  Test different settings to find your perfect balance
-                </span>
+              <li className="flex items-start space-x-3">
+                <div className="flex items-center justify-center w-8 h-8 bg-info/10 rounded-full flex-shrink-0">
+                  <Lightbulb className="w-4 h-4 text-info" />
+                </div>
+                <div>
+                  <span className="font-medium text-foreground">Pro tip</span>
+                  <p className="text-xs">
+                    🧪 Test different settings to find your perfect balance
+                  </p>
+                </div>
               </li>
             </ul>
           </CardContent>
