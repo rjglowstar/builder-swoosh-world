@@ -46,8 +46,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard-2" element={<Dashboard2 />} />
+          <Route path="/dashboard" element={<Dashboard2 />} />
+          <Route path="/dashboard-old" element={<Dashboard />} />
           <Route path="/manage-faces" element={<ManageFaces />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/subscription" element={<Subscription />} />
