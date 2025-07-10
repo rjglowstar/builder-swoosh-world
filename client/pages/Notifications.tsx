@@ -159,8 +159,9 @@ export default function Notifications() {
       <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Notifications List */}
         {notifications.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-0">
             {notifications.map((notification) => (
+              <div className="d-block mb-2">
               <Link
                 key={notification.id}
                 to={notification.action}
@@ -207,7 +208,8 @@ export default function Notifications() {
                     </div>
                   </CardContent>
                 </Card>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         ) : (
