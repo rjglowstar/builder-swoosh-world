@@ -47,6 +47,7 @@ import {
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
+import { useAppStatus } from "@/contexts/AppStatusContext";
 
 export default function GuestMode() {
   const { goBack } = useSmartNavigation();
