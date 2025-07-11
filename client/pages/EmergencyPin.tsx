@@ -143,7 +143,7 @@ export default function EmergencyPin() {
                       <li>• Use this PIN to bypass face recognition</li>
                       <li>• Keep it secret and memorable</li>
                       <li>• PIN will work even during scheduled protection</li>
-                      <li>• Change PIN anytime from Settings > Emergency PIN</li>
+                                            <li>• Change PIN anytime from Settings → Emergency PIN</li>
                       <li>• Forgotten PIN? Reset via biometric + Google account</li>
                     </ul>
                   </div>
