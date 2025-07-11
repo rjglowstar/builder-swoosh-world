@@ -96,7 +96,7 @@ export function AppStatusProvider({ children }: { children: ReactNode }) {
         description: "Backup access method configured successfully",
         timestamp: new Date().toLocaleString(),
         read: false,
-        icon: "Key",
+        icon: Key,
         iconColor: "text-success",
         bgColor: "bg-success/10",
         borderColor: "border-success/20",
