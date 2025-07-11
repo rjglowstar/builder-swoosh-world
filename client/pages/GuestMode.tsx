@@ -82,6 +82,7 @@ export default function GuestMode() {
     }
 
     setIsGuestModeEnabled(newState);
+    setGuestModeEnabled(newState);
     setShowConfirmDialog(false);
 
     if (newState) {
