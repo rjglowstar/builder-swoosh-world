@@ -1,19 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Key, AlertTriangle, Check, Shield } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ArrowLeft, Key, AlertTriangle, Check, Shield, HelpCircle, Eye, EyeOff, Info } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function EmergencyPin() {
   const [pin, setPin] = useState(["", "", "", ""]);
   const [confirmPin, setConfirmPin] = useState(["", "", "", ""]);
   const [step, setStep] = useState(1); // 1: enter pin, 2: confirm pin, 3: success
+  const [showPin, setShowPin] = useState(false);
+  const [showConfirmPin, setShowConfirmPin] = useState(false);
 
   const handlePinChange = (index: number, value: string) => {
     if (value.length <= 1 && /^\d*$/.test(value)) {
       const newPin = [...pin];
       newPin[index] = value;
       setPin(newPin);
+
+      // Haptic feedback
+      if (value && 'vibrate' in navigator) {
+        navigator.vibrate(10);
+      }
 
       // Auto-focus next input
       if (value && index < 3) {
@@ -28,6 +41,11 @@ export default function EmergencyPin() {
       const newPin = [...confirmPin];
       newPin[index] = value;
       setConfirmPin(newPin);
+
+      // Haptic feedback
+      if (value && 'vibrate' in navigator) {
+        navigator.vibrate(10);
+      }
 
       // Auto-focus next input
       if (value && index < 3) {
@@ -62,6 +80,10 @@ export default function EmergencyPin() {
       setStep(2);
     } else if (step === 2 && isConfirmComplete && pinsMatch) {
       setStep(3);
+      // Haptic feedback for success
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
       // Save PIN logic here
       console.log("PIN saved:", pin.join(""));
     }
@@ -71,6 +93,8 @@ export default function EmergencyPin() {
     setPin(["", "", "", ""]);
     setConfirmPin(["", "", "", ""]);
     setStep(1);
+    setShowPin(false);
+    setShowConfirmPin(false);
   };
 
   if (step === 3) {
@@ -119,6 +143,8 @@ export default function EmergencyPin() {
                       <li>• Use this PIN to bypass face recognition</li>
                       <li>• Keep it secret and memorable</li>
                       <li>• PIN will work even during scheduled protection</li>
+                      <li>• Change PIN anytime from Settings > Emergency PIN</li>
+                      <li>• Forgotten PIN? Reset via biometric + Google account</li>
                     </ul>
                   </div>
                 </div>
@@ -182,7 +208,7 @@ export default function EmergencyPin() {
         {/* PIN Entry */}
         <Card className="bg-white/60 backdrop-blur-sm border-white/20">
           <CardContent className="p-6 space-y-6">
-            <div className="text-center space-y-2">
+            <div className="text-center space-y-3">
               <h2 className="text-xl font-bold text-foreground">
                 {step === 1 ? "Enter 4-digit PIN" : "Confirm PIN"}
               </h2>
@@ -191,26 +217,55 @@ export default function EmergencyPin() {
                   ? "Choose a memorable 4-digit emergency PIN"
                   : "Enter your PIN again to confirm"}
               </p>
+              
+              {/* Show/Hide Toggle */}
+              <div className="flex justify-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => step === 1 ? setShowPin(!showPin) : setShowConfirmPin(!showConfirmPin)}
+                  className="text-xs"
+                >
+                  {(step === 1 ? showPin : showConfirmPin) ? (
+                    <>
+                      <EyeOff className="w-3 h-3 mr-1" />
+                      Hide PIN
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="w-3 h-3 mr-1" />
+                      Show PIN
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
 
             <div className="flex justify-center space-x-4">
-              {(step === 1 ? pin : confirmPin).map((digit, index) => (
-                <input
-                  key={index}
-                  id={`${step === 1 ? "pin" : "confirm"}-${index}`}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) =>
-                    step === 1
-                      ? handlePinChange(index, e.target.value)
-                      : handleConfirmPinChange(index, e.target.value)
-                  }
-                  onKeyDown={(e) => handleKeyDown(e, index, step === 2)}
-                  className="w-14 h-14 text-center text-2xl font-bold border-2 border-border rounded-xl bg-white/80 focus:border-primary focus:outline-none"
-                />
-              ))}
+              {(step === 1 ? pin : confirmPin).map((digit, index) => {
+                const shouldShow = step === 1 ? showPin : showConfirmPin;
+                return (
+                  <input
+                    key={index}
+                    id={`${step === 1 ? "pin" : "confirm"}-${index}`}
+                    type={shouldShow ? "text" : "password"}
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) =>
+                      step === 1
+                        ? handlePinChange(index, e.target.value)
+                        : handleConfirmPinChange(index, e.target.value)
+                    }
+                    onKeyDown={(e) => handleKeyDown(e, index, step === 2)}
+                    className="w-14 h-14 text-center text-2xl font-bold border-2 border-border rounded-xl bg-white/80 focus:border-primary focus:outline-none transition-all duration-200"
+                    style={{
+                      fontSize: shouldShow ? '1.5rem' : '2rem',
+                      lineHeight: shouldShow ? '1.5rem' : '2rem'
+                    }}
+                  />
+                );
+              })}
             </div>
 
             {step === 2 && isConfirmComplete && !pinsMatch && (
@@ -246,7 +301,7 @@ export default function EmergencyPin() {
 
         {/* Tips */}
         <Card className="bg-white/40 backdrop-blur-sm border-white/20">
-          <CardContent className="p-4">
+          <CardContent className="p-4 space-y-4">
             <h3 className="font-semibold text-foreground mb-3">
               PIN Guidelines
             </h3>
@@ -257,13 +312,44 @@ export default function EmergencyPin() {
               </li>
               <li className="flex items-start space-x-2">
                 <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                <span>Don't use your phone unlock PIN</span>
+                <div className="flex items-center space-x-2">
+                  <span>Don't use your phone unlock PIN</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="text-sm">
+                          Using the same PIN creates a security overlap risk. If someone sees your phone unlock PIN, 
+                          they could also bypass your face recognition. Choose a different PIN for better security.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </li>
               <li className="flex items-start space-x-2">
                 <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                 <span>Choose something memorable but unique</span>
               </li>
             </ul>
+            
+            {/* Recovery Information */}
+            <Card className="bg-info/10 border-info/20">
+              <CardContent className="p-3">
+                <div className="flex items-start space-x-2">
+                  <Info className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
+                  <div className="space-y-1">
+                    <h4 className="font-medium text-info text-sm">Forgot Your PIN?</h4>
+                    <p className="text-xs text-info/80">
+                      If you forget your emergency PIN, you can reset it from Settings > Emergency PIN 
+                      after verifying with face recognition or your Google account.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </CardContent>
         </Card>
       </div>
