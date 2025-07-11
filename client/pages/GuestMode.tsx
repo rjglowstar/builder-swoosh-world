@@ -486,7 +486,7 @@ export default function GuestMode() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
                 <div className="flex items-center justify-center space-x-1 mb-1">
                   <CheckCircle className="w-4 h-4 text-success" />
@@ -497,6 +497,16 @@ export default function GuestMode() {
                 </div>
                 <div className="text-xs text-muted-foreground">
                   Will be allowed
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center space-x-1 mb-1">
+                  <Eye className="w-4 h-4 text-warning" />
+                  <span className="text-sm font-medium">Unknown</span>
+                </div>
+                <div className="text-2xl font-bold text-warning">?</div>
+                <div className="text-xs text-muted-foreground">
+                  {parentModeEnabled ? "Will be blocked" : "Will be allowed"}
                 </div>
               </div>
               <div className="text-center">
@@ -513,16 +523,12 @@ export default function GuestMode() {
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-warning/10 rounded-lg border border-warning/20">
+            <div className="mt-4 p-3 bg-info/10 rounded-lg border border-info/20">
               <div className="flex items-start space-x-2">
-                <AlertTriangle className="w-4 h-4 text-warning mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-warning/90">
-                  <strong>Unknown faces</strong> will be{" "}
-                  {parentModeEnabled ? "blocked" : "allowed access"} during
-                  Guest Mode
-                  {!parentModeEnabled &&
-                    ", but won't be added to your trusted list"}
-                  .
+                <AlertTriangle className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-info/90">
+                  Unknown faces will be allowed access during Guest Mode, but
+                  won't be added to your trusted list.
                 </div>
               </div>
             </div>
