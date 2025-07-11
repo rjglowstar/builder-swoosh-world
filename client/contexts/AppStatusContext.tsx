@@ -78,8 +78,13 @@ export function AppStatusProvider({ children }: { children: ReactNode }) {
   });
 
   const [notifications, setNotifications] = useState<NotificationData[]>(() => {
-    const saved = localStorage.getItem("notifications");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("notifications");
+      return saved && saved !== "undefined" ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.warn("Failed to parse notifications from localStorage:", error);
+      return [];
+    }
   });
 
   // Wrapper functions that also update localStorage
