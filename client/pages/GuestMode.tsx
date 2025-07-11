@@ -51,7 +51,9 @@ import { useAppStatus } from "@/contexts/AppStatusContext";
 
 export default function GuestMode() {
   const { goBack } = useSmartNavigation();
-  const [isGuestModeEnabled, setIsGuestModeEnabled] = useState(false);
+  const { guestModeEnabled, setGuestModeEnabled } = useAppStatus();
+  const [isGuestModeEnabled, setIsGuestModeEnabled] =
+    useState(guestModeEnabled);
   const [timeLimit, setTimeLimit] = useState("unlimited");
   const [remainingTime, setRemainingTime] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
