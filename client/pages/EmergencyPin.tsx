@@ -98,6 +98,8 @@ export default function EmergencyPin() {
       }
       // Save PIN logic here
       console.log("PIN saved:", pin.join(""));
+      // Update app status context
+      setEmergencyPinSet(true);
     }
   };
 
