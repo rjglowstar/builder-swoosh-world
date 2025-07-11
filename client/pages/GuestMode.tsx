@@ -206,7 +206,7 @@ export default function GuestMode() {
                 </Badge>
               </div>
 
-                            {/* Main Toggle Button */}
+              {/* Main Toggle Button */}
               {isGuestModeEnabled ? (
                 // Turn OFF button - no confirmation needed
                 <Button
@@ -251,7 +251,9 @@ export default function GuestMode() {
                               <li>
                                 • Any face (except blocked) will unlock device
                               </li>
-                              <li>• Unknown faces won't be saved permanently</li>
+                              <li>
+                                • Unknown faces won't be saved permanently
+                              </li>
                               <li>• Recommended for temporary use only</li>
                             </ul>
                           </div>
@@ -270,44 +272,6 @@ export default function GuestMode() {
                   </AlertDialogContent>
                 </AlertDialog>
               )}
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="flex items-center space-x-2">
-                      <AlertTriangle className="w-5 h-5 text-warning" />
-                      <span>Enable Guest Mode?</span>
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      <div className="space-y-2">
-                        <p>
-                          This mode reduces security by allowing unknown faces
-                          to unlock your device.
-                        </p>
-                        <div className="bg-warning/10 p-3 rounded-lg border border-warning/20">
-                          <p className="text-sm text-warning font-medium">
-                            Security Impact:
-                          </p>
-                          <ul className="text-sm text-warning/80 mt-1 space-y-1">
-                            <li>
-                              • Any face (except blocked) will unlock device
-                            </li>
-                            <li>• Unknown faces won't be saved permanently</li>
-                            <li>• Recommended for temporary use only</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleToggleGuestMode(true)}
-                      className="bg-warning hover:bg-warning/90"
-                    >
-                      Yes, Enable Guest Mode
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
 
               {isGuestModeEnabled && (
                 <div className="p-3 bg-danger/10 rounded-lg border border-danger/20">
