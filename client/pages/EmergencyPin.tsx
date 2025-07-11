@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import { useAppStatus } from "@/contexts/AppStatusContext";
 
 export default function EmergencyPin() {
+  const { setEmergencyPinSet } = useAppStatus();
   const [pin, setPin] = useState(["", "", "", ""]);
   const [confirmPin, setConfirmPin] = useState(["", "", "", ""]);
   const [step, setStep] = useState(1); // 1: enter pin, 2: confirm pin, 3: success
