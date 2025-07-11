@@ -5,6 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { Key } from "lucide-react";
 
 interface AppStatusContextType {
   emergencyPinSet: boolean;
