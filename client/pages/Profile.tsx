@@ -544,7 +544,7 @@ export default function Profile() {
                 />
                 <Link to="/widget-setup">
                   <Button variant="ghost" size="sm">
-                    <Widget className="w-3 h-3" />
+                    <Grid3X3 className="w-3 h-3" />
                   </Button>
                 </Link>
               </div>
