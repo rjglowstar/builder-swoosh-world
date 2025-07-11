@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ArrowLeft,
   User,
@@ -14,12 +21,54 @@ import {
   Sliders,
   Smartphone,
   Key,
+  Check,
+  AlertTriangle,
+  HelpCircle,
+  Mail,
+  Bug,
+  Calendar,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
+import { useState } from "react";
 
 export default function Settings() {
   const { goBack } = useSmartNavigation();
+
+  // Mock data for status - in real app, this would come from state/API
+  const [statusData] = useState({
+    emergencyPinSet: false,
+    faceManagementSet: true,
+    trustedFaces: 3,
+    subscriptionActive: false,
+    subscriptionEndDate: null,
+    daysLeft: null,
+  });
+
+  const getStatusIndicator = (isSet: boolean, itemName: string) => {
+    if (isSet) {
+      return (
+        <Badge
+          variant="secondary"
+          className="bg-success/10 text-success border-success/20 text-xs px-2 py-0"
+        >
+          <Check className="w-3 h-3 mr-1" />
+          Set
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge
+          variant="secondary"
+          className="bg-warning/10 text-warning border-warning/20 text-xs px-2 py-0"
+        >
+          <AlertTriangle className="w-3 h-3 mr-1" />
+          Not Set
+        </Badge>
+      );
+    }
+  };
+
   const settingsCategories = [
     {
       title: "Account",
@@ -27,7 +76,14 @@ export default function Settings() {
       items: [
         { name: "Profile", path: "/profile" },
         { name: "Device Management", path: "/device-management" },
-        { name: "Subscription", path: "/subscription", premium: true },
+        {
+          name: "Subscription",
+          path: "/subscription",
+          premium: true,
+          subtitle: statusData.subscriptionActive
+            ? `Active until ${statusData.subscriptionEndDate || "Dec 15, 2024"}`
+            : "Free plan - upgrade available",
+        },
         { name: "Sync Settings", path: "/sync", premium: true },
       ],
     },
@@ -35,10 +91,24 @@ export default function Settings() {
       title: "Security",
       icon: Shield,
       items: [
-        { name: "Face Management", path: "/manage-faces" },
+        {
+          name: "Face Management",
+          path: "/manage-faces",
+          status: statusData.faceManagementSet,
+          subtitle: statusData.faceManagementSet
+            ? `${statusData.trustedFaces} trusted faces`
+            : "No faces added yet",
+        },
         { name: "Blocked Faces", path: "/blocked-faces" },
         { name: "Guest Mode", path: "/guest-mode" },
-        { name: "Emergency PIN", path: "/emergency-pin" },
+        {
+          name: "Emergency PIN",
+          path: "/emergency-pin",
+          status: statusData.emergencyPinSet,
+          subtitle: statusData.emergencyPinSet
+            ? "Backup access enabled"
+            : "Recommended for security",
+        },
         { name: "Detection Sensitivity", path: "/sensitivity" },
         { name: "Protection Schedule", path: "/schedule" },
         { name: "Unlock History", path: "/unlock-history" },
@@ -59,6 +129,8 @@ export default function Settings() {
       items: [
         { name: "About UnlockGuard", path: "/about" },
         { name: "Help & Tutorials", path: "/help" },
+        { name: "Contact Support", path: "/feedback", icon: Mail },
+        { name: "Report a Bug", path: "/feedback", icon: Bug },
         { name: "Feedback & Support", path: "/feedback" },
         { name: "Privacy Policy", path: "/privacy" },
         { name: "Terms of Service", path: "/terms" },
@@ -96,7 +168,25 @@ export default function Settings() {
                   <Crown className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Free Plan</h3>
+                  <div className="flex items-center space-x-2">
+                    <h3 className="font-semibold">Free Plan</h3>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="w-4 h-4 opacity-80 hover:opacity-100 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <div className="space-y-1 text-sm">
+                            <p className="font-medium">What's included:</p>
+                            <p>• Basic face recognition</p>
+                            <p>• Up to 3 trusted faces</p>
+                            <p>• Local storage only</p>
+                            <p>• Standard sensitivity</p>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <p className="text-sm opacity-90">Basic face recognition</p>
                 </div>
               </div>
@@ -131,16 +221,30 @@ export default function Settings() {
                       to={item.path}
                       className="flex items-center justify-between p-4 hover:bg-white/40 transition-colors"
                     >
-                      <div className="flex items-center space-x-3">
-                        <span className="text-foreground">{item.name}</span>
-                        {item.premium && (
-                          <div className="flex items-center space-x-1 px-2 py-0.5 bg-warning/20 rounded-full">
-                            <Crown className="w-3 h-3 text-warning" />
-                            <span className="text-xs text-warning font-medium">
-                              PRO
-                            </span>
-                          </div>
+                      <div className="flex items-center space-x-3 flex-1">
+                        {item.icon && (
+                          <item.icon className="w-4 h-4 text-muted-foreground" />
                         )}
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-foreground">{item.name}</span>
+                            {item.premium && (
+                              <div className="flex items-center space-x-1 px-2 py-0.5 bg-warning/20 rounded-full">
+                                <Crown className="w-3 h-3 text-warning" />
+                                <span className="text-xs text-warning font-medium">
+                                  PRO
+                                </span>
+                              </div>
+                            )}
+                            {item.hasOwnProperty("status") &&
+                              getStatusIndicator(item.status, item.name)}
+                          </div>
+                          {item.subtitle && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {item.subtitle}
+                            </p>
+                          )}
+                        </div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-muted-foreground" />
                     </Link>
@@ -163,17 +267,35 @@ export default function Settings() {
             <div className="text-xs text-muted-foreground">
               Build 2024.1.15 • Privacy First Security
             </div>
+            <div className="flex justify-center space-x-4 text-xs text-muted-foreground mt-2">
+              <button className="hover:text-primary">Check for Updates</button>
+              <button className="hover:text-primary">Changelog</button>
+            </div>
           </CardContent>
         </Card>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-4">
           <Link to="/emergency-pin">
-            <Card className="bg-danger/10 border-danger/20 hover:bg-danger/20 transition-colors">
+            <Card
+              className={`${statusData.emergencyPinSet ? "bg-success/10 border-success/20 hover:bg-success/20" : "bg-danger/10 border-danger/20 hover:bg-danger/20"} transition-colors`}
+            >
               <CardContent className="p-4 text-center">
-                <Key className="w-6 h-6 text-danger mx-auto mb-2" />
-                <div className="text-sm font-medium text-danger">
+                <div className="relative">
+                  <Key
+                    className={`w-6 h-6 mx-auto mb-2 ${statusData.emergencyPinSet ? "text-success" : "text-danger"}`}
+                  />
+                  {!statusData.emergencyPinSet && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full"></div>
+                  )}
+                </div>
+                <div
+                  className={`text-sm font-medium ${statusData.emergencyPinSet ? "text-success" : "text-danger"}`}
+                >
                   Emergency PIN
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {statusData.emergencyPinSet ? "Configured" : "Set Now"}
                 </div>
               </CardContent>
             </Card>
@@ -183,6 +305,9 @@ export default function Settings() {
               <CardContent className="p-4 text-center">
                 <Clock className="w-6 h-6 text-info mx-auto mb-2" />
                 <div className="text-sm font-medium text-info">Schedule</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Quick Access
+                </div>
               </CardContent>
             </Card>
           </Link>
