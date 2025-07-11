@@ -30,20 +30,18 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSmartNavigation } from "@/hooks/useSmartNavigation";
-import { useState } from "react";
+import { useAppStatus } from "@/contexts/AppStatusContext";
 
 export default function Settings() {
   const { goBack } = useSmartNavigation();
-
-  // Mock data for status - in real app, this would come from state/API
-  const [statusData] = useState({
-    emergencyPinSet: false,
-    faceManagementSet: true,
-    trustedFaces: 3,
-    subscriptionActive: false,
-    subscriptionEndDate: null,
-    daysLeft: null,
-  });
+  const {
+    emergencyPinSet,
+    faceManagementSet,
+    trustedFaces,
+    guestModeEnabled,
+    scheduleEnabled,
+    subscriptionActive,
+  } = useAppStatus();
 
   const getStatusIndicator = (isSet: boolean, itemName: string) => {
     if (isSet) {
@@ -80,8 +78,8 @@ export default function Settings() {
           name: "Subscription",
           path: "/subscription",
           premium: true,
-          subtitle: statusData.subscriptionActive
-            ? `Active until ${statusData.subscriptionEndDate || "Dec 15, 2024"}`
+          subtitle: subscriptionActive
+            ? "Premium Plus active"
             : "Free plan - upgrade available",
         },
         { name: "Sync Settings", path: "/sync", premium: true },
@@ -94,23 +92,34 @@ export default function Settings() {
         {
           name: "Face Management",
           path: "/manage-faces",
-          status: statusData.faceManagementSet,
-          subtitle: statusData.faceManagementSet
-            ? `${statusData.trustedFaces} trusted faces`
+          status: faceManagementSet,
+          subtitle: faceManagementSet
+            ? `${trustedFaces} trusted faces`
             : "No faces added yet",
         },
         { name: "Blocked Faces", path: "/blocked-faces" },
-        { name: "Guest Mode", path: "/guest-mode" },
+        {
+          name: "Guest Mode",
+          path: "/guest-mode",
+          subtitle: guestModeEnabled ? "Currently active" : "Inactive",
+          statusColor: guestModeEnabled
+            ? "text-warning"
+            : "text-muted-foreground",
+        },
         {
           name: "Emergency PIN",
           path: "/emergency-pin",
-          status: statusData.emergencyPinSet,
-          subtitle: statusData.emergencyPinSet
+          status: emergencyPinSet,
+          subtitle: emergencyPinSet
             ? "Backup access enabled"
             : "Recommended for security",
         },
         { name: "Detection Sensitivity", path: "/sensitivity" },
-        { name: "Protection Schedule", path: "/schedule" },
+        {
+          name: "Protection Schedule",
+          path: "/schedule",
+          subtitle: scheduleEnabled ? "Schedule active" : "Manual mode only",
+        },
         { name: "Unlock History", path: "/unlock-history" },
       ],
     },
@@ -160,7 +169,9 @@ export default function Settings() {
 
       <div className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Premium Status Card */}
-        <Card className="bg-gradient-to-r from-primary to-blue-600 text-white border-none">
+        <Card
+          className={`bg-gradient-to-r ${subscriptionActive ? "from-warning to-yellow-500" : "from-primary to-blue-600"} text-white border-none`}
+        >
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -169,7 +180,9 @@ export default function Settings() {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h3 className="font-semibold">Free Plan</h3>
+                    <h3 className="font-semibold">
+                      {subscriptionActive ? "Premium Plus" : "Free Plan"}
+                    </h3>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -178,27 +191,44 @@ export default function Settings() {
                         <TooltipContent className="max-w-xs">
                           <div className="space-y-1 text-sm">
                             <p className="font-medium">What's included:</p>
-                            <p>• Basic face recognition</p>
-                            <p>• Up to 3 trusted faces</p>
-                            <p>• Local storage only</p>
-                            <p>• Standard sensitivity</p>
+                            {subscriptionActive ? (
+                              <>
+                                <p>• Unlimited trusted faces</p>
+                                <p>• Cross-device sync</p>
+                                <p>• Advanced detection</p>
+                                <p>• Priority support</p>
+                              </>
+                            ) : (
+                              <>
+                                <p>• Basic face recognition</p>
+                                <p>• Up to 3 trusted faces</p>
+                                <p>• Local storage only</p>
+                                <p>• Standard sensitivity</p>
+                              </>
+                            )}
                           </div>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-sm opacity-90">Basic face recognition</p>
+                  <p className="text-sm opacity-90">
+                    {subscriptionActive
+                      ? "All features unlocked"
+                      : "Basic face recognition"}
+                  </p>
                 </div>
               </div>
-              <Link to="/pricing">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="bg-white text-primary hover:bg-white/90"
-                >
-                  Upgrade
-                </Button>
-              </Link>
+              {!subscriptionActive && (
+                <Link to="/pricing">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="bg-white text-primary hover:bg-white/90"
+                  >
+                    Upgrade
+                  </Button>
+                </Link>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -240,7 +270,9 @@ export default function Settings() {
                               getStatusIndicator(item.status, item.name)}
                           </div>
                           {item.subtitle && (
-                            <p className="text-xs text-muted-foreground mt-1">
+                            <p
+                              className={`text-xs mt-1 ${item.statusColor || "text-muted-foreground"}`}
+                            >
                               {item.subtitle}
                             </p>
                           )}
@@ -278,35 +310,43 @@ export default function Settings() {
         <div className="grid grid-cols-2 gap-4">
           <Link to="/emergency-pin">
             <Card
-              className={`${statusData.emergencyPinSet ? "bg-success/10 border-success/20 hover:bg-success/20" : "bg-danger/10 border-danger/20 hover:bg-danger/20"} transition-colors`}
+              className={`${emergencyPinSet ? "bg-success/10 border-success/20 hover:bg-success/20" : "bg-danger/10 border-danger/20 hover:bg-danger/20"} transition-colors`}
             >
               <CardContent className="p-4 text-center">
                 <div className="relative">
                   <Key
-                    className={`w-6 h-6 mx-auto mb-2 ${statusData.emergencyPinSet ? "text-success" : "text-danger"}`}
+                    className={`w-6 h-6 mx-auto mb-2 ${emergencyPinSet ? "text-success" : "text-danger"}`}
                   />
-                  {!statusData.emergencyPinSet && (
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full"></div>
+                  {!emergencyPinSet && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-danger rounded-full animate-pulse"></div>
                   )}
                 </div>
                 <div
-                  className={`text-sm font-medium ${statusData.emergencyPinSet ? "text-success" : "text-danger"}`}
+                  className={`text-sm font-medium ${emergencyPinSet ? "text-success" : "text-danger"}`}
                 >
                   Emergency PIN
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {statusData.emergencyPinSet ? "Configured" : "Set Now"}
+                  {emergencyPinSet ? "Configured" : "Set Now"}
                 </div>
               </CardContent>
             </Card>
           </Link>
           <Link to="/schedule">
-            <Card className="bg-info/10 border-info/20 hover:bg-info/20 transition-colors">
+            <Card
+              className={`${scheduleEnabled ? "bg-primary/10 border-primary/20 hover:bg-primary/20" : "bg-info/10 border-info/20 hover:bg-info/20"} transition-colors`}
+            >
               <CardContent className="p-4 text-center">
-                <Clock className="w-6 h-6 text-info mx-auto mb-2" />
-                <div className="text-sm font-medium text-info">Schedule</div>
+                <Clock
+                  className={`w-6 h-6 mx-auto mb-2 ${scheduleEnabled ? "text-primary" : "text-info"}`}
+                />
+                <div
+                  className={`text-sm font-medium ${scheduleEnabled ? "text-primary" : "text-info"}`}
+                >
+                  Schedule
+                </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Quick Access
+                  {scheduleEnabled ? "Active" : "Quick Access"}
                 </div>
               </CardContent>
             </Card>
