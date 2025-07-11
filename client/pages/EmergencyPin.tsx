@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAppStatus } from "@/contexts/AppStatusContext";
 
 export default function EmergencyPin() {
   const [pin, setPin] = useState(["", "", "", ""]);
