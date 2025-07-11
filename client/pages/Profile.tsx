@@ -19,7 +19,7 @@ import {
   Target,
   Palette,
   Globe,
-  Widget,
+  Grid3X3,
   RotateCcw,
   LogOut,
   Trash2,
