@@ -203,7 +203,7 @@ export default function GuestMode() {
                         <AlertTriangle className="w-5 h-5 text-warning" />
                         <span>Enable Guest Mode?</span>
                       </AlertDialogTitle>
-                      <AlertDialogDescription>
+                      <AlertDialogDescription asChild>
                         <div className="space-y-2">
                           <p>
                             This mode reduces security by allowing unknown faces
@@ -395,8 +395,8 @@ export default function GuestMode() {
               <div className="flex items-start space-x-2">
                 <AlertTriangle className="w-4 h-4 text-warning mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-warning/90">
-                  <strong>Unknown faces</strong> will be allowed access during Guest Mode, but
-                  won't be added to your trusted list.
+                  <strong>Unknown faces</strong> will be allowed access during
+                  Guest Mode, but won't be added to your trusted list.
                 </div>
               </div>
             </div>
