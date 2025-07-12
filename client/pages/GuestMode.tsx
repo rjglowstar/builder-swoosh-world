@@ -391,7 +391,7 @@ export default function GuestMode() {
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-info/10 rounded-lg border border-info/20">
+            <div className="mt-4 p-3 bg-warning/10 rounded-lg border border-warning/20">
               <div className="flex items-start space-x-2">
                 <AlertTriangle className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-info/90">
