@@ -395,7 +395,7 @@ export default function GuestMode() {
               <div className="flex items-start space-x-2">
                 <AlertTriangle className="w-4 h-4 text-info mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-warning/90">
-                  Unknown faces will be allowed access during Guest Mode, but
+                  <strong>Unknown faces</strong> will be allowed access during Guest Mode, but
                   won't be added to your trusted list.
                 </div>
               </div>
