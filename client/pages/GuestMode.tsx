@@ -38,11 +38,7 @@ import {
   Users,
   Clock,
   Info,
-  Activity,
-  Baby,
   UserPlus,
-  BarChart3,
-  Calendar,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -59,18 +55,6 @@ export default function GuestMode() {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [parentModeEnabled, setParentModeEnabled] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
-  // Mock usage data - in real app this would come from state/API
-  const [usageStats] = useState({
-    timesUsed: 7,
-    lastUsed: "2 days ago",
-    unknownFacesAllowed: 12,
-    recentActivity: [
-      { date: "Today", unknownFaces: 2, duration: "45 min" },
-      { date: "Yesterday", unknownFaces: 1, duration: "20 min" },
-      { date: "Jan 13", unknownFaces: 3, duration: "1h 15min" },
-    ],
-  });
 
   const handleToggleGuestMode = (confirmed = false) => {
     const newState = !isGuestModeEnabled;
@@ -154,28 +138,6 @@ export default function GuestMode() {
           <div className="flex items-center space-x-2">
             <UserCheck className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-primary">Guest Mode</h1>
-          </div>
-
-          {/* Usage Stats Indicator */}
-          <div className="ml-auto">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-info/10 rounded-full">
-                    <Activity className="w-4 h-4 text-info" />
-                    <span className="text-xs font-medium text-info">
-                      {usageStats.timesUsed}
-                    </span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="text-sm">
-                    <p>Used {usageStats.timesUsed} times</p>
-                    <p>Last used: {usageStats.lastUsed}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
           </div>
         </div>
       </div>
@@ -332,91 +294,9 @@ export default function GuestMode() {
                   </SelectContent>
                 </Select>
               </div>
-
-              {/* Parent Mode Option */}
-              <div className="flex items-center justify-between p-3 bg-info/10 rounded-lg border border-info/20">
-                <div className="flex items-center space-x-2">
-                  <Baby className="w-4 h-4 text-info" />
-                  <div>
-                    <span className="text-info font-medium text-sm">
-                      Family Mode
-                    </span>
-                    <div className="text-xs text-info/80">
-                      Allow only known family members
-                    </div>
-                  </div>
-                </div>
-                <Switch
-                  checked={parentModeEnabled}
-                  onCheckedChange={setParentModeEnabled}
-                />
-              </div>
-
-              {parentModeEnabled && (
-                <div className="pl-6 text-xs text-muted-foreground">
-                  Only trusted faces will be allowed. Unknown faces will be
-                  blocked.
-                </div>
-              )}
             </CardContent>
           </Card>
         )}
-
-        {/* Usage Statistics */}
-        <Card className="bg-white/60 backdrop-blur-sm border-white/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-primary" />
-              Usage Statistics
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">
-                  {usageStats.timesUsed}
-                </div>
-                <div className="text-xs text-muted-foreground">Times Used</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-warning">
-                  {usageStats.unknownFacesAllowed}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Unknown Faces
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-bold text-info">
-                  {usageStats.lastUsed}
-                </div>
-                <div className="text-xs text-muted-foreground">Last Used</div>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-foreground">
-                Recent Activity
-              </h4>
-              {usageStats.recentActivity.map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-2 bg-slate-50 rounded-lg"
-                >
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-xs font-medium">{activity.date}</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-xs text-muted-foreground">
-                    <span>{activity.unknownFaces} unknown faces</span>
-                    <span>{activity.duration}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
 
         {/* How Guest Mode Works */}
         <Card className="bg-info/10 border-info/20">
@@ -434,32 +314,20 @@ export default function GuestMode() {
               <div className="flex items-start space-x-3">
                 <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                 <div className="text-sm">
-                  <strong>
-                    {parentModeEnabled
-                      ? "Trusted faces only"
-                      : "Any face detected"}
-                  </strong>{" "}
-                  = Access allowed
+                  <strong>Any face detected</strong> = Access allowed
                   <br />
                   <span className="text-muted-foreground">
-                    {parentModeEnabled
-                      ? "Only known family members can unlock"
-                      : "Trusted faces, unknown faces, anyone can unlock"}
+                    Trusted faces, unknown faces, anyone can unlock
                   </span>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <XCircle className="w-4 h-4 text-danger mt-0.5 flex-shrink-0" />
                 <div className="text-sm">
-                  <strong>
-                    Blocked faces{parentModeEnabled ? " & unknown faces" : ""}
-                  </strong>{" "}
-                  = Access denied
+                  <strong>Blocked faces</strong> = Access denied
                   <br />
                   <span className="text-muted-foreground">
-                    {parentModeEnabled
-                      ? "Blocked users and strangers are restricted"
-                      : "Only blocked users are still restricted"}
+                    Only blocked users are still restricted
                   </span>
                 </div>
               </div>
@@ -506,7 +374,7 @@ export default function GuestMode() {
                 </div>
                 <div className="text-2xl font-bold text-warning">?</div>
                 <div className="text-xs text-muted-foreground">
-                  {parentModeEnabled ? "Will be blocked" : "Will be allowed"}
+                  Will be allowed
                 </div>
               </div>
               <div className="text-center">
@@ -559,15 +427,8 @@ export default function GuestMode() {
               <div className="space-y-1">
                 <h3 className="font-semibold text-danger">Security Notice</h3>
                 <p className="text-sm text-danger/80">
-                  Guest Mode{" "}
-                  {parentModeEnabled
-                    ? "allows only family members but still "
-                    : ""}
-                  reduces security
-                  {parentModeEnabled
-                    ? " for trusted users"
-                    : " by allowing unknown faces"}
-                  . Use only when necessary and disable promptly after use.
+                  Guest Mode reduces security by allowing unknown faces. Use
+                  only when necessary and disable promptly after use.
                 </p>
               </div>
             </div>
